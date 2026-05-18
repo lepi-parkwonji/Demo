@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { PublicApiService } from '../../services/public-api.service';
+import { PublicApiService, SiteSettingsDto } from '../../services/public-api.service';
 
 @Component({
   selector: 'app-footer',
@@ -10,7 +10,7 @@ import { PublicApiService } from '../../services/public-api.service';
 export class FooterComponent implements OnInit {
   private api = inject(PublicApiService);
 
-  site = signal<{ businessName: string; businessNo: string; ceoName: string; address: string; phone: string; email: string } | null>(null);
+  site = signal<SiteSettingsDto | null>(null);
 
   ngOnInit() {
     this.api.getSiteSettings().subscribe({ next: data => this.site.set(data), error: () => {} });

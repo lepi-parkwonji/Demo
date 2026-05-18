@@ -5,6 +5,15 @@ import { PaginatedResult } from '@demo-shop/common';
 
 export type { NoticeDTO, FaqDTO, GalleryDTO, ScheduleDTO, RegistrationDTO, PaginatedResult };
 
+export interface SiteSettingsDto {
+  businessName: string;
+  businessNo: string;
+  ceoName: string;
+  address: string;
+  phone: string;
+  email: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class PublicApiService {
   private http = inject(HttpClient);
@@ -55,7 +64,7 @@ export class PublicApiService {
   }
 
   getSiteSettings() {
-    return this.http.get<{ businessName: string; businessNo: string; ceoName: string; address: string; phone: string; email: string }>('/api/public/site-settings');
+    return this.http.get<SiteSettingsDto>('/api/public/site-settings');
   }
 
   getSitePage(slug: string) {
