@@ -5,7 +5,7 @@ import { firstValueFrom } from 'rxjs';
 
 export interface AdminDTO {
   id: number;
-  usrname: string;
+  username: string;
   displayName: string;
 }
 
@@ -24,8 +24,8 @@ export class AuthService {
 
   private fetchPromise: Promise<boolean> | null = null;
 
-  signin(usrname: string, password: string) {
-    return this.http.post<TokensDTO>('/api/admin/signin', { usrname, password });
+  signin(username: string, password: string) {
+    return this.http.post<TokensDTO>('/api/admin/signin', { username, password });
   }
 
   private meApi() {

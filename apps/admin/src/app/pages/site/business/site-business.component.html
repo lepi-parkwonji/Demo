@@ -13,7 +13,7 @@
 
       <label class="form-control">
         <div class="label px-0 pb-2"><span class="label-text font-medium">사업자등록번호</span></div>
-        <input class="input input-bordered w-full" type="text" [value]="businessNo" (input)="formatBusinessNo($event)" placeholder="000-00-00000" maxlength="12" inputmode="numeric" />
+        <input class="input input-bordered w-full" type="text" [(ngModel)]="businessNo" placeholder="000-00-00000" maxlength="12" inputmode="numeric" />
       </label>
 
       <label class="form-control">
@@ -28,7 +28,7 @@
 
       <label class="form-control">
         <div class="label px-0 pb-2"><span class="label-text font-medium">대표전화</span></div>
-        <input class="input input-bordered w-full" type="text" [value]="phone" (input)="formatPhone($event)" placeholder="02-0000-0000" maxlength="13" inputmode="numeric" />
+        <input class="input input-bordered w-full" type="text" [(ngModel)]="phone" placeholder="02-0000-0000" maxlength="13" inputmode="numeric" />
       </label>
 
       <label class="form-control">

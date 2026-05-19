@@ -49,20 +49,20 @@ export class InquiryService {
     return this.paginate(this.buildSearchWhere(query), pageNo, pageSize);
   }
 
+  private maskPublicItem(item: Inquiry): Inquiry {
+    const masked = item.isSecret
+      ? { ...item, title: '비밀글입니다.', content: '', authorName: '비공개' }
+      : { ...item };
+    if (!item.isExposed) masked.answer = null;
+    return masked;
+  }
+
   async searchPublic(dto: OffsetSearchOptionDTO): Promise<OffsetPaginationDTO<Inquiry>> {
     const { pageNo, pageSize, query } = dto;
-    const where: Prisma.InquiryWhereInput = {
-      ...this.buildSearchWhere(query),
-      isExposed: true,
-    };
-    const result = await this.paginate(where, pageNo, pageSize);
+    const result = await this.paginate(this.buildSearchWhere(query), pageNo, pageSize);
     return {
       ...result,
-      items: result.items.map(item =>
-        item.isSecret
-          ? { ...item, title: '비밀글입니다.', content: '', authorName: '비공개' }
-          : item,
-      ),
+      items: result.items.map(item => this.maskPublicItem(item)),
     };
   }
 
@@ -73,10 +73,10 @@ export class InquiryService {
   }
 
   async findOnePublic(id: number) {
-    const inquiry = await this.prisma.inquiry.findFirst({ where: { id, deletedAt: null, isExposed: true } });
+    const inquiry = await this.prisma.inquiry.findFirst({ where: { id, deletedAt: null } });
     if (!inquiry) throw new NotFoundException('문의를 찾을 수 없습니다.');
     if (inquiry.isSecret) throw new ForbiddenException('비밀글입니다.');
-    return inquiry;
+    return this.maskPublicItem(inquiry);
   }
 
   async findOneByCustomer(id: number, customerId: number) {
@@ -93,6 +93,7 @@ export class InquiryService {
         content: dto.content,
         authorName: dto.authorName,
         isSecret: dto.isSecret ?? false,
+        isExposed: true,
         customerId: customerId ?? null,
       },
     });
@@ -108,6 +109,7 @@ export class InquiryService {
 
   async toggleExpose(id: number) {
     const inquiry = await this.findOne(id);
+    if (!inquiry.isAnswered) throw new ForbiddenException('답변된 문의만 공개 여부를 변경할 수 있습니다.');
     return this.prisma.inquiry.update({
       where: { id },
       data: { isExposed: !inquiry.isExposed },

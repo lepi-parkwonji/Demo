@@ -11,19 +11,19 @@ import { UpsertSitePageDTO } from './dtos/site-page.dto';
 export class SiteController {
   constructor(private siteService: SiteService) {}
 
-  @Get('settings')
+  @Get('business')
   @Auth()
   getSettings() {
     return this.siteService.getSettings();
   }
 
-  @Patch('settings')
+  @Patch('business')
   @Auth()
   updateSettings(@Body() dto: UpdateSiteSettingsDTO) {
     return this.siteService.updateSettings(dto);
   }
 
-  @Get('pages')
+  @Get('terms')
   @Auth()
   listPages() {
     return this.siteService.listPages();

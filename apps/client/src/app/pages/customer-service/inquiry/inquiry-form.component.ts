@@ -9,6 +9,7 @@ import {
   INQUIRY_AUTHOR_NAME_MAX,
   extractErrorMessage,
 } from '@demo-shop/common';
+import { ToastService } from '@demo-shop/ui';
 
 @Component({
   selector: 'app-inquiry-form',
@@ -19,6 +20,7 @@ export class InquiryFormComponent implements OnInit {
   private http = inject(HttpClient);
   private router = inject(Router);
   private authService = inject(AuthService);
+  private toast = inject(ToastService);
 
   readonly TITLE_MIN = INQUIRY_TITLE_MIN;
   readonly TITLE_MAX = INQUIRY_TITLE_MAX;
@@ -65,10 +67,13 @@ export class InquiryFormComponent implements OnInit {
       isSecret: this.isSecret,
     }).subscribe({
       next: () => {
+        this.toast.success('문의가 등록되었습니다.');
         this.router.navigate(['/customer-service/inquiry']);
       },
       error: (err) => {
-        this.errorMsg.set(extractErrorMessage(err, '등록에 실패했습니다. 다시 시도해주세요.'));
+        const msg = extractErrorMessage(err, '등록에 실패했습니다. 다시 시도해주세요.');
+        this.errorMsg.set(msg);
+        this.toast.error(msg);
         this.loading.set(false);
       },
     });

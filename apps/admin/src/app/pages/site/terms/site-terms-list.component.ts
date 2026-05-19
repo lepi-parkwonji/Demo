@@ -13,11 +13,11 @@ const PRESET_PAGES = [
 ];
 
 @Component({
-  selector: 'app-site-pages-list',
+  selector: 'app-site-terms-list',
   imports: [SlicePipe],
-  templateUrl: './site-pages-list.component.html',
+  templateUrl: './site-terms-list.component.html',
 })
-export class SitePagesListComponent implements OnInit {
+export class SiteTermsListComponent implements OnInit {
   private http = inject(HttpClient);
   private router = inject(Router);
 
@@ -32,10 +32,10 @@ export class SitePagesListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.http.get<SitePage[]>('/api/site/pages').subscribe(data => this.pages.set(data));
+    this.http.get<SitePage[]>('/api/site/terms').subscribe(data => this.pages.set(data));
   }
 
   navigateToEdit(slug: string, title: string) {
-    this.router.navigate(['/site/pages', slug, 'edit'], { state: { title } });
+    this.router.navigate(['/site/terms', slug, 'edit'], { state: { title } });
   }
 }

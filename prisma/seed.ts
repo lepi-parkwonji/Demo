@@ -78,7 +78,7 @@ async function main() {
   await prisma.admin.upsert({
     where: { id: 1 },
     update: {},
-    create: { id: 1, usrname: 'admin', password, displayName: '관리자' },
+    create: { id: 1, username: 'admin', password, displayName: '관리자' },
   });
   console.log('✓ Admin seeded');
 

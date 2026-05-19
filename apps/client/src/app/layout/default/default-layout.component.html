@@ -8,3 +8,20 @@
   </main>
   <app-footer />
 </div>
+
+<div class="toast toast-end toast-bottom z-50 gap-2 p-4">
+  @for (toast of toastSvc.toasts(); track toast.id) {
+    <div
+      class="alert shadow-lg max-w-sm w-full"
+      [ngClass]="{
+        'alert-success': toast.type === 'success',
+        'alert-error': toast.type === 'error',
+        'alert-warning': toast.type === 'warning',
+        'alert-info': toast.type === 'info'
+      }"
+    >
+      <span class="flex-1 text-sm">{{ toast.message }}</span>
+      <button class="btn btn-xs btn-ghost" (click)="toastSvc.dismiss(toast.id)">✕</button>
+    </div>
+  }
+</div>

@@ -86,12 +86,12 @@ export class PublicController {
     return this.registrationService.updateByReservationNo(reservationNo, dto);
   }
 
-  @Get('site-settings')
+  @Get('site-business')
   getSiteSettings() {
     return this.siteService.getSettings();
   }
 
-  @Get('site-pages/:slug')
+  @Get('site-terms/:slug')
   getSitePage(@Param('slug') slug: string) {
     return this.siteService.getPage(slug);
   }

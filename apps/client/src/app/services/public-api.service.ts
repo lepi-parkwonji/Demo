@@ -64,11 +64,11 @@ export class PublicApiService {
   }
 
   getSiteSettings() {
-    return this.http.get<SiteSettingsDto>('/api/public/site-settings');
+    return this.http.get<SiteSettingsDto>('/api/public/site-business');
   }
 
   getSitePage(slug: string) {
-    return this.http.get<{ slug: string; title: string; content: string }>(`/api/public/site-pages/${slug}`);
+    return this.http.get<{ slug: string; title: string; content: string }>(`/api/public/site-terms/${slug}`);
   }
 
   getBanners(type: 'HERO' | 'INTRO' | 'SPONSOR' | 'WIDE') {

@@ -3,14 +3,14 @@ import { Component, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastService } from '@demo-shop/ui';
-import { RichEditorComponent } from '../../shared/rich-editor.component';
+import { RichEditorComponent } from '../../../shared/rich-editor.component';
 
 @Component({
-  selector: 'app-site-page-form',
+  selector: 'app-site-term-form',
   imports: [FormsModule, RichEditorComponent],
-  templateUrl: './site-page-form.component.html',
+  templateUrl: './site-term-form.component.html',
 })
-export class SitePageFormComponent implements OnInit {
+export class SiteTermFormComponent implements OnInit {
   @ViewChild(RichEditorComponent) editorRef!: RichEditorComponent;
 
   private http = inject(HttpClient);
@@ -30,7 +30,7 @@ export class SitePageFormComponent implements OnInit {
     if (stateTitle) this.title = stateTitle;
 
     this.loading.set(true);
-    this.http.get<{ title: string; content: string }>(`/api/site/pages/${this.slug}`).subscribe({
+    this.http.get<{ title: string; content: string }>(`/api/site/terms/${this.slug}`).subscribe({
       next: data => {
         this.title = data.title;
         this.content = data.content;
@@ -42,13 +42,13 @@ export class SitePageFormComponent implements OnInit {
   }
 
   navigateBack() {
-    this.router.navigate(['/site/pages']);
+    this.router.navigate(['/site/terms']);
   }
 
   onSubmit() {
     if (!this.title.trim()) { this.toast.error('제목을 입력해주세요.'); return; }
     this.saving.set(true);
-    this.http.put(`/api/site/pages/${this.slug}`, { title: this.title, content: this.content }).subscribe({
+    this.http.put(`/api/site/terms/${this.slug}`, { title: this.title, content: this.content }).subscribe({
       next: () => { this.toast.success('저장되었습니다.'); this.saving.set(false); this.navigateBack(); },
       error: () => { this.toast.error('저장에 실패했습니다.'); this.saving.set(false); },
     });

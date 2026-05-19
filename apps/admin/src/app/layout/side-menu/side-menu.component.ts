@@ -18,7 +18,7 @@ const MENUS: Menu[] = [
     children: [
       { name: '공지사항', href: '/customer/notice' },
       { name: 'FAQ', href: '/customer/faq' },
-      { name: '문의하기', href: '/customer/inquiry' },
+      { name: '1:1 문의하기', href: '/customer/inquiry' },
     ],
   },
   {
@@ -40,8 +40,8 @@ const MENUS: Menu[] = [
   {
     name: '사이트 관리',
     children: [
-      { name: '기본 정보', href: '/site/settings' },
-      { name: '약관/안내 페이지', href: '/site/pages' },
+      { name: '회사 정보', href: '/site/business' },
+      { name: '약관/안내', href: '/site/terms' },
     ],
   },
 ];

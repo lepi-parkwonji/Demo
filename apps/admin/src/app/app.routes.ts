@@ -120,16 +120,16 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./pages/expo/press/press-form.component').then(m => m.PressFormComponent),
       },
       {
-        path: 'site/settings',
-        loadComponent: () => import('./pages/site/site-settings.component').then(m => m.SiteSettingsComponent),
+        path: 'site/business',
+        loadComponent: () => import('./pages/site/business/site-business.component').then(m => m.SiteBusinessComponent),
       },
       {
-        path: 'site/pages',
-        loadComponent: () => import('./pages/site/site-pages-list.component').then(m => m.SitePagesListComponent),
+        path: 'site/terms',
+        loadComponent: () => import('./pages/site/terms/site-terms-list.component').then(m => m.SiteTermsListComponent),
       },
       {
-        path: 'site/pages/:slug/edit',
-        loadComponent: () => import('./pages/site/site-page-form.component').then(m => m.SitePageFormComponent),
+        path: 'site/terms/:slug/edit',
+        loadComponent: () => import('./pages/site/terms/site-term-form.component').then(m => m.SiteTermFormComponent),
       },
     ],
   },

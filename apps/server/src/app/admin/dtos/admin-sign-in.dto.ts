@@ -5,10 +5,10 @@ export class AdminSignInDTO {
   @ApiProperty({ type: String })
   @IsNotEmpty({ message: '아이디를 입력해주세요.' })
   @IsString()
-  usrname: string;
+  username!: string;
 
   @ApiProperty({ type: String })
   @IsNotEmpty({ message: '비밀번호를 입력해주세요.' })
   @IsString()
-  password: string;
+  password!: string;
 }

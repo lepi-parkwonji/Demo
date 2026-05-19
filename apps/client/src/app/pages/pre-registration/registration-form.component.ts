@@ -5,6 +5,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { ScheduleDTO, RegistrationDTO, PublicApiService } from '../../services/public-api.service';
 import { formatPhoneNumber, extractErrorMessage } from '@demo-shop/common';
+import { ToastService } from '@demo-shop/ui';
 
 @Component({
   selector: 'app-registration-form',
@@ -15,6 +16,7 @@ export class RegistrationFormComponent {
   private api = inject(PublicApiService);
   private destroyRef = inject(DestroyRef);
   private router = inject(Router);
+  private toast = inject(ToastService);
 
   schedules = signal<ScheduleDTO[]>([]);
   loading = signal(false);
@@ -92,9 +94,11 @@ export class RegistrationFormComponent {
     })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: data => { this.result.set(data); this.loading.set(false); },
+        next: data => { this.result.set(data); this.loading.set(false); this.toast.success('사전등록이 완료되었습니다!'); },
         error: err => {
-          this.errorMsg.set(extractErrorMessage(err, '등록에 실패했습니다. 다시 시도해주세요.'));
+          const msg = extractErrorMessage(err, '등록에 실패했습니다. 다시 시도해주세요.');
+          this.errorMsg.set(msg);
+          this.toast.error(msg);
           this.loading.set(false);
         },
       });

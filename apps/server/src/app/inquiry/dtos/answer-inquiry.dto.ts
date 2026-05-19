@@ -8,5 +8,5 @@ export class AnswerInquiryDTO {
   @IsString()
   @MinLength(INQUIRY_ANSWER_MIN, { message: `답변은 ${INQUIRY_ANSWER_MIN}자 이상 입력해주세요.` })
   @MaxLength(INQUIRY_ANSWER_MAX, { message: `답변은 ${INQUIRY_ANSWER_MAX}자 이내로 입력해주세요.` })
-  answer: string;
+  answer!: string;
 }

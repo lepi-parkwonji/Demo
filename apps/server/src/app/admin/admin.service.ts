@@ -12,7 +12,7 @@ export class AdminService {
   constructor(private prisma: PrismaService, private authUtil: AuthUtil) {}
 
   async signin(dto: AdminSignInDTO): Promise<TokensDTO> {
-    const admin = await this.prisma.admin.findUnique({ where: { usrname: dto.usrname } });
+    const admin = await this.prisma.admin.findUnique({ where: { username: dto.username } });
     if (!admin || !this.authUtil.compareHash(dto.password, admin.password))
       throw new UnauthorizedException('아이디 또는 비밀번호가 올바르지 않습니다.');
 
