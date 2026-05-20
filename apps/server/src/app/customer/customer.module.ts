@@ -3,7 +3,7 @@ import { AuthModule } from '../auth/auth.module';
 import { InquiryModule } from '../inquiry/inquiry.module';
 import { CustomerController } from './customer.controller';
 import { CustomerService } from './customer.service';
-import { CustomerAuthGuard } from './guards/customer-auth.guard';
+import { CustomerAuthGuard } from '../auth/guards/customer-auth.guard';
 
 @Module({
   imports: [AuthModule, InquiryModule],

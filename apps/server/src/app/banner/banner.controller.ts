@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { Auth } from '../../libs/decorators/auth.decorator';
+import { AdminAuth } from '../auth/decorators/admin-auth.decorator';
 import { BannerService } from './banner.service';
 import { BannerType, CreateBannerDto, UpdateBannerDto } from './dtos/banner.dto';
 
@@ -11,37 +11,37 @@ export class BannerController {
   constructor(private bannerService: BannerService) {}
 
   @Get()
-  @Auth()
+  @AdminAuth()
   findAll(@Query('type') type?: BannerType) {
     return this.bannerService.findAll(type);
   }
 
   @Get(':id')
-  @Auth()
+  @AdminAuth()
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.bannerService.findOne(id);
   }
 
   @Post()
-  @Auth()
+  @AdminAuth()
   create(@Body() dto: CreateBannerDto) {
     return this.bannerService.create(dto);
   }
 
   @Patch(':id')
-  @Auth()
+  @AdminAuth()
   update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateBannerDto) {
     return this.bannerService.update(id, dto);
   }
 
   @Patch(':id/toggle-expose')
-  @Auth()
+  @AdminAuth()
   toggleExpose(@Param('id', ParseIntPipe) id: number) {
     return this.bannerService.toggleExpose(id);
   }
 
   @Delete(':id')
-  @Auth()
+  @AdminAuth()
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.bannerService.remove(id);
   }

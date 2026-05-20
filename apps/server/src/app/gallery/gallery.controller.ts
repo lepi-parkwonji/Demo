@@ -5,7 +5,7 @@ import {
 import { ApiBody, ApiBearerAuth, ApiConsumes, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
-import { Auth } from '../../libs/decorators/auth.decorator';
+import { AdminAuth } from '../auth/decorators/admin-auth.decorator';
 import { ApiPaginatedResponse } from '../../libs/swagger/api-paginated-response.decorator';
 import { ApiSearchQuery } from '../../libs/swagger/api-search-query.decorator';
 import { CreateGalleryDTO } from './dtos/create-gallery.dto';
@@ -26,56 +26,56 @@ export class GalleryController {
 
   @ApiPaginatedResponse(GalleryResponseDTO) @ApiSearchQuery()
   @Get('search')
-  @Auth()
+  @AdminAuth()
   search(@Query() dto: GallerySearchOptionDTO) {
     return this.galleryService.search(dto);
   }
 
   @ApiOkResponse({ schema: { properties: { eventNames: { type: 'array', items: { type: 'string' } } } } })
   @Get('event-names')
-  @Auth()
+  @AdminAuth()
   getEventNames() {
     return this.galleryService.getEventNames();
   }
 
   @ApiOkResponse({ type: GalleryResponseDTO }) @ApiParam({ name: 'id', type: Number })
   @Get(':id')
-  @Auth()
+  @AdminAuth()
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.galleryService.findOne(id);
   }
 
   @ApiOkResponse({ type: GalleryResponseDTO }) @ApiBody({ type: CreateGalleryDTO })
   @Post()
-  @Auth()
+  @AdminAuth()
   create(@Body() dto: CreateGalleryDTO) {
     return this.galleryService.create(dto);
   }
 
   @ApiOkResponse({ type: GalleryResponseDTO }) @ApiBody({ type: UpdateGalleryDTO }) @ApiParam({ name: 'id', type: Number })
   @Patch(':id')
-  @Auth()
+  @AdminAuth()
   update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateGalleryDTO) {
     return this.galleryService.update(id, dto);
   }
 
   @ApiOkResponse({ type: GalleryResponseDTO }) @ApiParam({ name: 'id', type: Number })
   @Delete(':id')
-  @Auth()
+  @AdminAuth()
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.galleryService.remove(id);
   }
 
   @ApiOkResponse({ type: GalleryResponseDTO }) @ApiParam({ name: 'id', type: Number })
   @Patch(':id/expose')
-  @Auth()
+  @AdminAuth()
   toggleExpose(@Param('id', ParseIntPipe) id: number) {
     return this.galleryService.toggleExpose(id);
   }
 
   @ApiOkResponse({ type: GalleryResponseDTO }) @ApiParam({ name: 'id', type: Number })
   @Patch(':id/pin')
-  @Auth()
+  @AdminAuth()
   togglePin(@Param('id', ParseIntPipe) id: number) {
     return this.galleryService.togglePin(id);
   }
@@ -83,7 +83,7 @@ export class GalleryController {
   @ApiConsumes('multipart/form-data')
   @ApiOkResponse({ schema: { properties: { url: { type: 'string' } } } })
   @Post('upload/image')
-  @Auth()
+  @AdminAuth()
   @UseInterceptors(FileInterceptor('file', {
     storage: memoryStorage(),
     fileFilter: (_, file, cb) => cb(null, /\.(jpg|jpeg|png|gif|webp)$/i.test(file.originalname)),

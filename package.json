@@ -55,6 +55,7 @@
     "daisyui": "^5.5.19",
     "dotenv": "^17.4.2",
     "express": "^4.21.2",
+    "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.3",
     "ngx-tiptap": "^14.0.1",
     "passport": "^0.7.0",

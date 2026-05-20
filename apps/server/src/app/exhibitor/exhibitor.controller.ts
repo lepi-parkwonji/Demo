@@ -4,7 +4,7 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiOkResponse, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ExhibitorStatus } from '@generated/prisma';
-import { Auth } from '../../libs/decorators/auth.decorator';
+import { AdminAuth } from '../auth/decorators/admin-auth.decorator';
 import { ApiPaginatedResponse } from '../../libs/swagger/api-paginated-response.decorator';
 import { ApiSearchQuery } from '../../libs/swagger/api-search-query.decorator';
 import { CreateExhibitorDTO } from './dtos/create-exhibitor.dto';
@@ -22,7 +22,7 @@ export class ExhibitorController {
   @ApiQuery({ name: 'status', required: false, enum: ExhibitorStatus })
   @ApiQuery({ name: 'scheduleId', required: false, type: Number })
   @Get('search')
-  @Auth()
+  @AdminAuth()
   search(
     @Query('pageNo') pageNo = 1,
     @Query('pageSize') pageSize = 10,
@@ -41,28 +41,28 @@ export class ExhibitorController {
 
   @ApiOkResponse({ type: ExhibitorResponseDTO }) @ApiParam({ name: 'id', type: Number })
   @Get(':id')
-  @Auth()
+  @AdminAuth()
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.exhibitorService.findOne(id);
   }
 
   @ApiOkResponse({ type: ExhibitorResponseDTO }) @ApiBody({ type: CreateExhibitorDTO })
   @Post()
-  @Auth()
+  @AdminAuth()
   create(@Body() dto: CreateExhibitorDTO) {
     return this.exhibitorService.create(dto);
   }
 
   @ApiOkResponse({ type: ExhibitorResponseDTO }) @ApiBody({ type: UpdateExhibitorDTO }) @ApiParam({ name: 'id', type: Number })
   @Patch(':id')
-  @Auth()
+  @AdminAuth()
   update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateExhibitorDTO) {
     return this.exhibitorService.update(id, dto);
   }
 
   @ApiOkResponse({ type: ExhibitorResponseDTO }) @ApiParam({ name: 'id', type: Number })
   @Delete(':id')
-  @Auth()
+  @AdminAuth()
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.exhibitorService.remove(id);
   }

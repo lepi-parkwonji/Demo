@@ -2,7 +2,7 @@ import { Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common'
 import { ApiConsumes, ApiOkResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
-import { Auth } from '../../libs/decorators/auth.decorator';
+import { AdminAuth } from '../auth/decorators/admin-auth.decorator';
 import { SupabaseService } from '../supabase/supabase.service';
 
 @ApiTags('upload')
@@ -14,7 +14,7 @@ export class UploadController {
   @ApiConsumes('multipart/form-data')
   @ApiOkResponse({ schema: { properties: { url: { type: 'string' } } } })
   @Post('image')
-  @Auth()
+  @AdminAuth()
   @UseInterceptors(FileInterceptor('file', {
     storage: memoryStorage(),
     fileFilter: (_, file, cb) => cb(null, /\.(jpg|jpeg|png|gif|webp)$/i.test(file.originalname)),
@@ -28,7 +28,7 @@ export class UploadController {
   @ApiConsumes('multipart/form-data')
   @ApiOkResponse({ schema: { properties: { url: { type: 'string' } } } })
   @Post('video')
-  @Auth()
+  @AdminAuth()
   @UseInterceptors(FileInterceptor('file', {
     storage: memoryStorage(),
     fileFilter: (_, file, cb) => cb(null, /\.(mp4|webm|ogg|mov)$/i.test(file.originalname)),

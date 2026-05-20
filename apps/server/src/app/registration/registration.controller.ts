@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
-import { Auth } from '../../libs/decorators/auth.decorator';
+import { AdminAuth } from '../auth/decorators/admin-auth.decorator';
 import { ApiPaginatedResponse } from '../../libs/swagger/api-paginated-response.decorator';
 import { ApiSearchQuery } from '../../libs/swagger/api-search-query.decorator';
 import { CreateRegistrationDTO } from './dtos/create-registration.dto';
@@ -17,35 +17,35 @@ export class RegistrationController {
 
   @ApiPaginatedResponse(RegistrationResponseDTO) @ApiSearchQuery()
   @Get('search')
-  @Auth()
+  @AdminAuth()
   search(@Query() dto: RegistrationSearchOptionDTO) {
     return this.registrationService.search(dto);
   }
 
   @ApiOkResponse({ type: RegistrationResponseDTO }) @ApiBody({ type: CreateRegistrationDTO })
   @Post()
-  @Auth()
+  @AdminAuth()
   create(@Body() dto: CreateRegistrationDTO) {
     return this.registrationService.create(dto);
   }
 
   @ApiOkResponse({ type: RegistrationResponseDTO }) @ApiParam({ name: 'id', type: Number })
   @Get(':id')
-  @Auth()
+  @AdminAuth()
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.registrationService.findOne(id);
   }
 
   @ApiOkResponse({ type: RegistrationResponseDTO }) @ApiBody({ type: UpdateRegistrationDTO }) @ApiParam({ name: 'id', type: Number })
   @Patch(':id')
-  @Auth()
+  @AdminAuth()
   update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateRegistrationDTO) {
     return this.registrationService.update(id, dto);
   }
 
   @ApiOkResponse({ type: RegistrationResponseDTO }) @ApiParam({ name: 'id', type: Number })
   @Delete(':id')
-  @Auth()
+  @AdminAuth()
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.registrationService.remove(id);
   }

@@ -1,10 +1,11 @@
 /// 관리자
 model Admin {
-  id          Int      @id @default(1)
-  username    String   @unique
-  password    String
-  displayName String   @default("관리자")
-  faqs        Faq[]
-  notices     Notice[]
+  id          Int      @id @default(1) 
+  username      String    @unique
+  password      String
+  displayName   String    @default("관리자")
+  refreshToken  String?
+  faqs          Faq[]
+  notices       Notice[]
 }
 

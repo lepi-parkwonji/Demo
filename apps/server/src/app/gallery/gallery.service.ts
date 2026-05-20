@@ -1,7 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Gallery, Prisma } from '@generated/prisma';
 import { PrismaService } from '../../prisma/prisma.service';
-import { OffsetPaginationDTO } from '../../libs/dtos/offset-pagination.dto';
+import { PaginatedResult } from '@demo-shop/common';
+import { paginate } from '../../libs/utils/paginate';
 import { CreateGalleryDTO } from './dtos/create-gallery.dto';
 import { UpdateGalleryDTO } from './dtos/update-gallery.dto';
 import { GallerySearchOptionDTO } from './dtos/gallery-search-option.dto';
@@ -24,29 +25,8 @@ export class GalleryService {
     };
   }
 
-  private async paginate(
-    where: Prisma.GalleryWhereInput,
-    pageNo: number,
-    pageSize: number,
-  ): Promise<OffsetPaginationDTO<Gallery>> {
-    const skip = (pageNo - 1) * pageSize;
-    const [totalItems, items] = await Promise.all([
-      this.prisma.gallery.count({ where }),
-      this.prisma.gallery.findMany({
-        where,
-        skip,
-        take: pageSize,
-        orderBy: { createdAt: 'desc' },
-      }),
-    ]);
-    return {
-      items,
-      pageInfo: { pageNo, pageSize, totalItems, totalPages: Math.ceil(totalItems / pageSize) },
-    };
-  }
-
-  async search(dto: GallerySearchOptionDTO): Promise<OffsetPaginationDTO<Gallery>> {
-    return this.paginate(this.buildSearchWhere(dto), dto.pageNo, dto.pageSize);
+  async search(dto: GallerySearchOptionDTO): Promise<PaginatedResult<Gallery>> {
+    return paginate(this.prisma.gallery, this.buildSearchWhere(dto), dto.pageNo, dto.pageSize, { createdAt: 'desc' });
   }
 
   async findOne(id: number) {
@@ -89,8 +69,8 @@ export class GalleryService {
     return this.prisma.gallery.update({ where: { id }, data: { isPinned: !gallery.isPinned } });
   }
 
-  async searchPublic(dto: GallerySearchOptionDTO): Promise<OffsetPaginationDTO<Gallery>> {
-    return this.paginate({ ...this.buildSearchWhere(dto), isExposed: true }, dto.pageNo, dto.pageSize);
+  async searchPublic(dto: GallerySearchOptionDTO): Promise<PaginatedResult<Gallery>> {
+    return paginate(this.prisma.gallery, { ...this.buildSearchWhere(dto), isExposed: true }, dto.pageNo, dto.pageSize, { createdAt: 'desc' });
   }
 
   async findOnePublic(id: number) {

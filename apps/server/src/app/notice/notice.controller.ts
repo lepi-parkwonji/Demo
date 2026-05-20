@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query } from '@nestjs/common';
 import { ApiBody, ApiBearerAuth, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
-import { Auth } from '../../libs/decorators/auth.decorator';
+import { AdminAuth } from '../auth/decorators/admin-auth.decorator';
 import { OffsetSearchOptionDTO } from '../../libs/dtos/search-option.dto';
 import { ApiPaginatedResponse } from '../../libs/swagger/api-paginated-response.decorator';
 import { ApiSearchQuery } from '../../libs/swagger/api-search-query.decorator';
@@ -28,35 +28,35 @@ export class NoticeController {
 
   @ApiBearerAuth() @ApiOkResponse({ type: NoticeResponseDTO }) @ApiBody({ type: CreateNoticeDTO })
   @Post()
-  @Auth()
+  @AdminAuth()
   create(@Body() dto: CreateNoticeDTO) {
     return this.noticeService.create(dto);
   }
 
   @ApiBearerAuth() @ApiOkResponse({ type: NoticeResponseDTO }) @ApiBody({ type: UpdateNoticeDTO }) @ApiParam({ name: 'id', type: Number })
   @Patch(':id')
-  @Auth()
+  @AdminAuth()
   update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateNoticeDTO) {
     return this.noticeService.update(id, dto);
   }
 
   @ApiBearerAuth() @ApiOkResponse({ type: NoticeResponseDTO }) @ApiParam({ name: 'id', type: Number })
   @Delete(':id')
-  @Auth()
+  @AdminAuth()
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.noticeService.remove(id);
   }
 
   @ApiBearerAuth() @ApiOkResponse({ type: NoticeResponseDTO }) @ApiParam({ name: 'id', type: Number })
   @Patch(':id/pin')
-  @Auth()
+  @AdminAuth()
   togglePin(@Param('id', ParseIntPipe) id: number) {
     return this.noticeService.togglePin(id);
   }
 
   @ApiBearerAuth() @ApiOkResponse({ type: NoticeResponseDTO }) @ApiParam({ name: 'id', type: Number })
   @Patch(':id/expose')
-  @Auth()
+  @AdminAuth()
   toggleExpose(@Param('id', ParseIntPipe) id: number) {
     return this.noticeService.toggleExpose(id);
   }

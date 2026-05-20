@@ -3,7 +3,7 @@ import { Component, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastService } from '@demo-shop/ui';
-import { RichEditorComponent } from '../../../shared/rich-editor.component';
+import { RichEditorComponent } from '../../../libs/rich-editor.component';
 
 @Component({
   selector: 'app-site-term-form',

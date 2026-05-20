@@ -10,7 +10,7 @@ import {
 } from '@demo-shop/api-client';
 import { map } from 'rxjs/operators';
 import { ToastService } from '@demo-shop/ui';
-import { RichEditorComponent } from '../../../shared/rich-editor.component';
+import { RichEditorComponent } from '../../../libs/rich-editor.component';
 
 const TITLE_MAX = 100;
 
