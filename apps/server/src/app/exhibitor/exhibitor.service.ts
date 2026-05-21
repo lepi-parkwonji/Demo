@@ -15,6 +15,9 @@ export interface ExhibitorSearchOptions {
 
 const exhibitorInclude = { schedule: { select: { fairName: true } } } as const;
 
+type ExhibitorWithSchedule = Prisma.ExhibitorGetPayload<{ include: typeof exhibitorInclude }>;
+type ExhibitorResponse = Omit<ExhibitorWithSchedule, 'schedule'> & { scheduleFairName: string };
+
 @Injectable()
 export class ExhibitorService {
   constructor(private prisma: PrismaService) {}
@@ -34,15 +37,12 @@ export class ExhibitorService {
     };
   }
 
-  private toResponse(exhibitor: any) {
-    return {
-      ...exhibitor,
-      scheduleFairName: exhibitor.schedule?.fairName ?? '',
-      schedule: undefined,
-    };
+  private toResponse(exhibitor: ExhibitorWithSchedule): ExhibitorResponse {
+    const { schedule, ...rest } = exhibitor;
+    return { ...rest, scheduleFairName: schedule?.fairName ?? '' };
   }
 
-  async search(options: ExhibitorSearchOptions): Promise<OffsetPaginationDTO<any>> {
+  async search(options: ExhibitorSearchOptions): Promise<OffsetPaginationDTO<ExhibitorResponse>> {
     const { pageNo, pageSize } = options;
     const where = this.buildWhere(options);
     const skip = (pageNo - 1) * pageSize;

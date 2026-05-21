@@ -7,13 +7,15 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { GalleryResponseDto } from '../../models/gallery-response-dto';
+import { GalleryCategory, GalleryResponseDto } from '../../models/gallery-response-dto';
 import { PageInfoDto } from '../../models/page-info-dto';
 
 export interface GalleryControllerSearch$Params {
   pageNo?: number;
   pageSize?: number;
   query?: string;
+  category?: GalleryCategory;
+  eventName?: string;
 }
 
 export function galleryControllerSearch(http: HttpClient, rootUrl: string, params?: GalleryControllerSearch$Params, context?: HttpContext): Observable<StrictHttpResponse<{
@@ -25,6 +27,8 @@ export function galleryControllerSearch(http: HttpClient, rootUrl: string, param
     rb.query('pageNo', params.pageNo, {});
     rb.query('pageSize', params.pageSize, {});
     rb.query('query', params.query, {});
+    rb.query('category', params.category, {});
+    rb.query('eventName', params.eventName, {});
   }
 
   return http.request(

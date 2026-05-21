@@ -1,9 +1,9 @@
-<div class="w-full max-w-4xl">
+<div class="w-full max-w-4xl mx-auto">
   <div class="mb-5">
     <h2 class="text-xl font-bold">{{ isEditMode ? '갤러리 수정' : '갤러리 등록' }}</h2>
   </div>
 
-  <div class="card bg-base-100 shadow-sm min-h-[44rem]">
+  <div class="card bg-base-100 shadow-sm">
     <div class="card-body gap-4 flex flex-col">
 
       <label class="form-control">
@@ -22,40 +22,66 @@
         />
       </label>
 
+      <!-- 커버 이미지 업로드 -->
       <div class="form-control">
         <div class="label px-0 pb-2">
-          <span class="label-text font-medium">내용 *</span>
+          <span class="label-text font-medium">대표 이미지 (썸네일)</span>
+        </div>
+
+        @if (imageUrl) {
+          <div class="relative w-48 h-48 rounded-lg overflow-hidden border border-base-200 group">
+            <img [src]="imageUrl" alt="커버 이미지" class="w-full h-full object-cover" />
+            <button
+              type="button"
+              class="absolute top-2 right-2 btn btn-xs btn-error opacity-0 group-hover:opacity-100 transition-opacity"
+              (click)="removeCoverImage()"
+            >✕</button>
+          </div>
+        } @else {
+          <label class="flex flex-col items-center justify-center w-48 h-48 border-2 border-dashed border-base-300 rounded-lg cursor-pointer hover:border-primary transition-colors bg-base-50">
+            @if (coverUploading()) {
+              <span class="loading loading-spinner loading-md text-primary"></span>
+            } @else {
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-base-content/30 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span class="text-xs text-base-content/40">클릭하여 이미지 업로드</span>
+            }
+            <input type="file" class="hidden" accept="image/*" (change)="onCoverImageChange($event)" [disabled]="coverUploading()" />
+          </label>
+        }
+        <p class="text-xs text-base-content/40 mt-1">갤러리 목록에서 썸네일로 표시됩니다. (JPG, PNG, WEBP)</p>
+      </div>
+
+      <!-- 추가 이미지 / 내용 (rich editor) -->
+      <div class="form-control">
+        <div class="label px-0 pb-2">
+          <span class="label-text font-medium">이미지 묶음 / 내용</span>
         </div>
         <app-rich-editor
           [(content)]="content"
           [imageUploadUrl]="imageUploadUrl"
         />
+        <p class="text-xs text-base-content/40 mt-1">에디터 내 이미지 버튼으로 여러 장의 이미지를 추가할 수 있습니다.</p>
       </div>
 
       <label class="form-control">
         <div class="label px-0 pb-2"><span class="label-text font-medium">행사명</span></div>
-        <input
-          class="input input-bordered w-full"
-          type="text"
-          [(ngModel)]="eventName"
-          list="event-name-list"
-          placeholder="행사명을 입력하세요"
-          maxlength="100"
-        />
-        <datalist id="event-name-list">
-          @for (name of eventNameSuggestions(); track name) {
-            <option [value]="name"></option>
+        <select class="select select-bordered w-full" [(ngModel)]="eventName">
+          <option value="">행사 선택 (선택사항)</option>
+          @for (s of schedules(); track s.id) {
+            <option [value]="s.fairName">{{ s.fairName }} ({{ s.year }} {{ s.region }})</option>
           }
-        </datalist>
+        </select>
       </label>
 
       @if (errorMsg()) {
         <p class="text-error text-sm">{{ errorMsg() }}</p>
       }
 
-      <div class="flex justify-end gap-2 pt-2 mt-auto">
+      <div class="flex justify-end gap-2 pt-2">
         <button class="btn btn-ghost" (click)="navigateBack()">취소</button>
-        <button class="btn btn-primary" [disabled]="loading()" (click)="onSubmit()">
+        <button class="btn btn-primary" [disabled]="loading() || coverUploading()" (click)="onSubmit()">
           {{ loading() ? '저장 중...' : (isEditMode ? '수정' : '등록') }}
         </button>
       </div>

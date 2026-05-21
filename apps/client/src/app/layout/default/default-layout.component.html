@@ -1,4 +1,27 @@
-<app-top-bar />
-<main class="min-h-screen bg-base-200">
-  <router-outlet />
-</main>
+<div class="min-h-screen flex flex-col">
+  <app-top-bar />
+  <div class="pt-16">
+    <app-wide-banner />
+  </div>
+  <main class="flex-1 bg-base-200">
+    <router-outlet />
+  </main>
+  <app-footer />
+</div>
+
+<div class="toast toast-end toast-bottom z-50 gap-2 p-4">
+  @for (toast of toastSvc.toasts(); track toast.id) {
+    <div
+      class="alert shadow-lg max-w-sm w-full"
+      [ngClass]="{
+        'alert-success': toast.type === 'success',
+        'alert-error': toast.type === 'error',
+        'alert-warning': toast.type === 'warning',
+        'alert-info': toast.type === 'info'
+      }"
+    >
+      <span class="flex-1 text-sm">{{ toast.message }}</span>
+      <button class="btn btn-xs btn-ghost" (click)="toastSvc.dismiss(toast.id)">✕</button>
+    </div>
+  }
+</div>

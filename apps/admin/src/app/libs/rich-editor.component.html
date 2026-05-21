@@ -1,0 +1,85 @@
+<div class="flex flex-wrap items-center gap-1 px-2 py-1.5 border border-base-300 border-b-0 rounded-t-lg bg-base-200">
+  <button type="button" class="btn btn-xs btn-ghost font-black"
+    [class.btn-active]="isActive('heading', { level: 1 })"
+    (click)="toggleHeading(1)" title="제목 1">H1</button>
+  <button type="button" class="btn btn-xs btn-ghost font-bold"
+    [class.btn-active]="isActive('heading', { level: 2 })"
+    (click)="toggleHeading(2)" title="제목 2">H2</button>
+  <button type="button" class="btn btn-xs btn-ghost font-semibold"
+    [class.btn-active]="isActive('heading', { level: 3 })"
+    (click)="toggleHeading(3)" title="제목 3">H3</button>
+
+  <div class="w-px h-4 bg-base-300 mx-1"></div>
+
+  <button type="button" class="btn btn-xs btn-ghost font-bold"
+    [class.btn-active]="isActive('bold')"
+    (click)="execCommand('toggleBold')" title="굵게 (Ctrl+B)">B</button>
+  <button type="button" class="btn btn-xs btn-ghost italic"
+    [class.btn-active]="isActive('italic')"
+    (click)="execCommand('toggleItalic')" title="기울임 (Ctrl+I)">I</button>
+
+  <div class="w-px h-4 bg-base-300 mx-1"></div>
+
+  <button type="button" class="btn btn-xs btn-ghost"
+    [class.btn-active]="isActive('bulletList')"
+    (click)="execCommand('toggleBulletList')" title="순서 없는 목록">• 목록</button>
+  <button type="button" class="btn btn-xs btn-ghost"
+    [class.btn-active]="isActive('orderedList')"
+    (click)="execCommand('toggleOrderedList')" title="순서 있는 목록">1. 목록</button>
+
+  <div class="w-px h-4 bg-base-300 mx-1"></div>
+
+  <!-- 이미지 업로드 -->
+  <button type="button" class="btn btn-xs btn-ghost gap-1"
+    [disabled]="uploading()"
+    (click)="imageInput.click()" title="이미지 삽입">
+    <svg xmlns="http://www.w3.org/2000/svg" class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+    </svg>
+    {{ uploading() === 'image' ? '업로드 중...' : '이미지' }}
+  </button>
+
+  <!-- 동영상: 파일 업로드 or YouTube URL -->
+  <div class="relative" #videoDropdown>
+    <button type="button" class="btn btn-xs btn-ghost gap-1"
+      [disabled]="!!uploading()"
+      (click)="toggleVideoMenu()" title="동영상 삽입">
+      <svg xmlns="http://www.w3.org/2000/svg" class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      {{ uploading() === 'video' ? '업로드 중...' : '동영상' }}
+    </button>
+
+    @if (showVideoMenu()) {
+      <div class="absolute left-0 top-full mt-1 z-50 bg-base-100 border border-base-300 rounded-lg shadow-lg min-w-36 py-1">
+        <button type="button" class="flex items-center gap-2 w-full px-3 py-2 text-xs hover:bg-base-200 text-left"
+          (click)="videoInput.click(); showVideoMenu.set(false)">
+          <svg xmlns="http://www.w3.org/2000/svg" class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+          </svg>
+          파일 업로드
+        </button>
+        <button type="button" class="flex items-center gap-2 w-full px-3 py-2 text-xs hover:bg-base-200 text-left"
+          (click)="insertYoutubeVideo(); showVideoMenu.set(false)">
+          <svg xmlns="http://www.w3.org/2000/svg" class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+          </svg>
+          YouTube / Vimeo URL
+        </button>
+      </div>
+    }
+  </div>
+
+  <input #imageInput type="file" accept="image/*" class="hidden" (change)="onImageSelect($event)" />
+  <input #videoInput type="file" accept="video/mp4,video/webm,video/ogg,video/quicktime" class="hidden" (change)="onVideoSelect($event)" />
+</div>
+
+<div
+  tiptap
+  [editor]="editor"
+  class="border border-base-300 rounded-b-lg min-h-64 p-3 focus-within:outline-2 focus-within:outline-offset-0 focus-within:outline-base-content/20 prose prose-sm max-w-none"
+></div>

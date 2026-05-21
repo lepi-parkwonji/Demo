@@ -1,0 +1,73 @@
+<div class="w-full max-w-5xl mx-auto">
+  <div class="flex items-center justify-between mb-5">
+    <h2 class="text-xl font-bold">홈 배너 관리</h2>
+    <button class="btn btn-primary btn-sm" (click)="navigateToNew()">+ 추가</button>
+  </div>
+
+  <!-- 탭 -->
+  <div role="tablist" class="tabs tabs-bordered mb-6">
+    @for (tab of tabs; track tab) {
+      <button
+        role="tab"
+        class="tab"
+        [class.tab-active]="activeTab() === tab"
+        (click)="selectTab(tab)"
+      >{{ typeLabels[tab] }}</button>
+    }
+  </div>
+
+  @if (loading()) {
+    <div class="flex justify-center py-20"><span class="loading loading-spinner"></span></div>
+  } @else if (banners().length === 0) {
+    <div class="text-center py-20 text-base-content/40">등록된 배너가 없습니다.</div>
+  } @else {
+    <div class="flex flex-col gap-3">
+      @for (banner of banners(); track banner.id) {
+        <div class="card bg-base-100 shadow-sm border border-base-200">
+          <div class="card-body flex-row items-center gap-4 p-4">
+
+            <!-- 썸네일 -->
+            @if (banner.videoUrl) {
+              <div class="w-24 h-16 bg-base-300 rounded flex items-center justify-center shrink-0 relative overflow-hidden">
+                <video [src]="banner.videoUrl" class="w-full h-full object-cover" muted></video>
+                <span class="absolute bottom-1 right-1 badge badge-xs badge-neutral opacity-80">동영상</span>
+              </div>
+            } @else if (banner.imageUrl) {
+              <img [src]="banner.imageUrl" [alt]="banner.title" class="w-24 h-16 object-cover rounded shrink-0">
+            } @else {
+              <div class="w-24 h-16 bg-base-200 rounded flex items-center justify-center shrink-0 text-base-content/30 text-xs">없음</div>
+            }
+
+            <!-- 정보 -->
+            <div class="flex-1 min-w-0">
+              <p class="font-medium truncate">{{ banner.title || '(제목 없음)' }}</p>
+              @if (banner.subtitle) {
+                <p class="text-sm text-base-content/60 truncate">{{ banner.subtitle }}</p>
+              }
+              @if (banner.linkUrl) {
+                <p class="text-xs text-base-content/40 truncate">{{ banner.linkUrl }}</p>
+              }
+            </div>
+
+            <!-- 순서 -->
+            <span class="badge badge-ghost badge-sm shrink-0">순서 {{ banner.sortOrder }}</span>
+
+            <!-- 노출 토글 -->
+            <input
+              type="checkbox"
+              class="toggle toggle-sm toggle-primary shrink-0"
+              [checked]="banner.isExposed"
+              (change)="toggleExpose(banner.id)"
+            >
+
+            <!-- 액션 -->
+            <div class="flex gap-2 shrink-0">
+              <button class="btn btn-sm btn-ghost" (click)="navigateToEdit(banner.id)">수정</button>
+              <button class="btn btn-sm btn-ghost text-error" (click)="remove(banner.id)">삭제</button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

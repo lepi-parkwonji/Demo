@@ -3,5 +3,5 @@
 
 export interface AdminSignInDto {
   password: string;
-  usrname: string;
+  username: string;
 }

@@ -1,51 +1,32 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Gallery, Prisma } from '@generated/prisma';
 import { PrismaService } from '../../prisma/prisma.service';
-import { OffsetPaginationDTO } from '../../libs/dtos/offset-pagination.dto';
-import { OffsetSearchOptionDTO } from '../../libs/dtos/search-option.dto';
+import { PaginatedResult } from '@demo-shop/common';
+import { paginate } from '../../libs/utils/paginate';
 import { CreateGalleryDTO } from './dtos/create-gallery.dto';
 import { UpdateGalleryDTO } from './dtos/update-gallery.dto';
+import { GallerySearchOptionDTO } from './dtos/gallery-search-option.dto';
 
 @Injectable()
 export class GalleryService {
   constructor(private prisma: PrismaService) {}
 
-  private buildSearchWhere(query?: string): Prisma.GalleryWhereInput {
+  private buildSearchWhere(dto: GallerySearchOptionDTO): Prisma.GalleryWhereInput {
     return {
       deletedAt: null,
-      ...(query && {
+      ...(dto.category && { category: dto.category }),
+      ...(dto.eventName && { eventName: dto.eventName }),
+      ...(dto.query && {
         OR: [
-          { title: { contains: query } },
-          { content: { contains: query } },
+          { title: { contains: dto.query } },
+          { content: { contains: dto.query } },
         ],
       }),
     };
   }
 
-  private async paginate(
-    where: Prisma.GalleryWhereInput,
-    pageNo: number,
-    pageSize: number,
-  ): Promise<OffsetPaginationDTO<Gallery>> {
-    const skip = (pageNo - 1) * pageSize;
-    const [totalItems, items] = await Promise.all([
-      this.prisma.gallery.count({ where }),
-      this.prisma.gallery.findMany({
-        where,
-        skip,
-        take: pageSize,
-        orderBy: { createdAt: 'desc' },
-      }),
-    ]);
-    return {
-      items,
-      pageInfo: { pageNo, pageSize, totalItems, totalPages: Math.ceil(totalItems / pageSize) },
-    };
-  }
-
-  async search(dto: OffsetSearchOptionDTO): Promise<OffsetPaginationDTO<Gallery>> {
-    const { pageNo, pageSize, query } = dto;
-    return this.paginate(this.buildSearchWhere(query), pageNo, pageSize);
+  async search(dto: GallerySearchOptionDTO): Promise<PaginatedResult<Gallery>> {
+    return paginate(this.prisma.gallery, this.buildSearchWhere(dto), dto.pageNo, dto.pageSize, { createdAt: 'desc' });
   }
 
   async findOne(id: number) {
@@ -81,5 +62,22 @@ export class GalleryService {
   async toggleExpose(id: number) {
     const gallery = await this.findOne(id);
     return this.prisma.gallery.update({ where: { id }, data: { isExposed: !gallery.isExposed } });
+  }
+
+  async togglePin(id: number) {
+    const gallery = await this.findOne(id);
+    return this.prisma.gallery.update({ where: { id }, data: { isPinned: !gallery.isPinned } });
+  }
+
+  async searchPublic(dto: GallerySearchOptionDTO): Promise<PaginatedResult<Gallery>> {
+    return paginate(this.prisma.gallery, { ...this.buildSearchWhere(dto), isExposed: true }, dto.pageNo, dto.pageSize, { createdAt: 'desc' });
+  }
+
+  async findOnePublic(id: number) {
+    const gallery = await this.prisma.gallery.findFirst({
+      where: { id, deletedAt: null, isExposed: true },
+    });
+    if (!gallery) throw new NotFoundException('갤러리를 찾을 수 없습니다.');
+    return gallery;
   }
 }

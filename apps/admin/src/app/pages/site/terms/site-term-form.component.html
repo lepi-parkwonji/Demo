@@ -1,0 +1,28 @@
+<div class="w-full max-w-4xl mx-auto">
+  <div class="mb-5">
+    <h2 class="text-xl font-bold">{{ title || '페이지 편집' }}</h2>
+  </div>
+
+  <div class="card bg-base-100 shadow-sm">
+    <div class="card-body gap-4 flex flex-col">
+
+      <label class="form-control">
+        <div class="label px-0 pb-2"><span class="label-text font-medium">제목 *</span></div>
+        <input class="input input-bordered w-full" type="text" [(ngModel)]="title" placeholder="제목을 입력하세요" maxlength="100" />
+      </label>
+
+      <div class="form-control">
+        <div class="label px-0 pb-2"><span class="label-text font-medium">내용</span></div>
+        <app-rich-editor [(content)]="content" />
+      </div>
+
+      <div class="flex justify-end gap-2 pt-2">
+        <button class="btn btn-ghost" (click)="navigateBack()">취소</button>
+        <button class="btn btn-primary" [disabled]="saving()" (click)="onSubmit()">
+          {{ saving() ? '저장 중...' : '저장' }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -13,6 +13,7 @@ export interface SearchSuggestion {
 })
 export class SearchInputComponent {
   placeholder = input('검색');
+  inputClass = input('');
   suggestions = input<SearchSuggestion[]>([]);
 
   queryChange = output<string>();

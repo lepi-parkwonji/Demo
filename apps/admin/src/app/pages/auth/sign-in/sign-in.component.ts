@@ -12,17 +12,17 @@ export class SignInComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  usrname = '';
+  username = '';
   password = '';
   loading = signal(false);
   errorMsg = signal('');
 
   async onSubmit() {
-    if (!this.usrname || !this.password) return;
+    if (!this.username || !this.password) return;
     this.loading.set(true);
     this.errorMsg.set('');
 
-    this.authService.signin(this.usrname, this.password).subscribe({
+    this.authService.signin(this.username, this.password).subscribe({
       next: (tokens) => {
         this.authService.loginAndFetch(tokens).then(ok => {
           if (ok) this.router.navigate(['/']);

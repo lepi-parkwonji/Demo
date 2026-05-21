@@ -1,0 +1,71 @@
+<div class="w-full max-w-6xl mx-auto">
+  <div class="flex justify-between items-center mb-5">
+    <h2 class="text-xl font-bold">사전등록 관리</h2>
+    <div class="flex gap-2">
+      <button class="btn btn-primary btn-sm" (click)="navigateToNew()">+ 수동 등록</button>
+    </div>
+  </div>
+
+  <div class="flex gap-2 mb-4">
+    <app-search-input
+      class="flex-1 min-w-0"
+      placeholder="이름 또는 연락처 검색"
+      [suggestions]="suggestions()"
+      (queryChange)="onQueryChange($event)"
+      (search)="onSearch($event)"
+      (select)="onSelect($event)"
+    />
+  </div>
+
+  <div class="card bg-base-100 shadow-sm overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="table table-zebra table-fixed w-full min-w-[40rem]">
+        <thead>
+          <tr>
+            <th class="w-14 text-center">번호</th>
+            <th class="w-32 font-mono">예약번호</th>
+            <th class="w-28">이름</th>
+            <th class="w-36">연락처</th>
+            <th class="w-48">박람회명</th>
+            <th class="w-24 text-center hidden sm:table-cell">마케팅 동의</th>
+            <th class="w-28 text-center hidden sm:table-cell">신청일</th>
+            <th class="w-16 text-center">관리</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of result()?.items ?? []; track item.id; let idx = $index) {
+            <tr class="hover cursor-pointer" (click)="openDetail(item)">
+              <td class="text-sm text-base-content/50 text-center">{{ rowNumber(idx) }}</td>
+              <td class="text-xs font-mono text-base-content/70">{{ item.reservationNo }}</td>
+              <td class="font-medium">{{ item.name }}</td>
+              <td class="text-sm text-base-content/80">{{ item.contact }}</td>
+              <td class="text-sm truncate">{{ item.fairName }}</td>
+              <td class="text-center hidden sm:table-cell">
+                <span class="badge badge-sm" [class]="item.marketingConsent ? 'badge-success' : 'badge-ghost'">
+                  {{ item.marketingConsent ? '동의' : '미동의' }}
+                </span>
+              </td>
+              <td class="text-sm hidden sm:table-cell text-base-content/60 text-center">{{ item.createdAt | slice:0:10 }}</td>
+              <td class="text-center">
+                <button class="btn btn-xs btn-error btn-outline whitespace-nowrap" (click)="remove(item, $event)">삭제</button>
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="8" class="text-center text-base-content/40 py-10">등록된 사전등록 내역이 없습니다.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  @if (result(); as r) {
+    <div class="mt-4 flex justify-center">
+      <app-pagination
+        [pageNo]="pageNo()"
+        [totalPages]="r.pageInfo.totalPages"
+        [totalItems]="r.pageInfo.totalItems"
+        (pageChange)="changePage($event)"
+      ></app-pagination>
+    </div>
+  }
+</div>

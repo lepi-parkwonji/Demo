@@ -1,0 +1,20 @@
+enum BannerType {
+  HERO    /// 홈 히어로 배너
+  INTRO   /// 전시소개 대표 이미지
+  SPONSOR /// 협찬사/파트너 로고
+  WIDE    /// 탑바 아래 전체 가로 배너
+}
+
+model Banner {
+  id         Int        @id @default(autoincrement())
+  type       BannerType
+  title      String     @default("")
+  subtitle   String     @default("")
+  imageUrl   String     @default("")
+  videoUrl   String     @default("")
+  linkUrl    String     @default("")
+  sortOrder  Int        @default(0)
+  isExposed  Boolean    @default(true)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}

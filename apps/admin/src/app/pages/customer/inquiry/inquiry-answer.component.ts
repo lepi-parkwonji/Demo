@@ -9,8 +9,8 @@ import {
   inquiryControllerFindOne,
 } from '@demo-shop/api-client';
 import { map } from 'rxjs/operators';
-import { ToastService } from '../../../services/toast.service';
-import { RichEditorComponent } from '../../../shared/rich-editor.component';
+import { ToastService } from '@demo-shop/ui';
+import { RichEditorComponent } from '../../../libs/rich-editor.component';
 
 @Component({
   selector: 'app-inquiry-answer',
@@ -45,8 +45,7 @@ export class InquiryAnswerComponent implements OnInit {
         this.inquiry.set(data);
         this.answer = data.answer ?? '';
       },
-      error: (error) => {
-        console.error('[inquiry findOne]', error);
+      error: () => {
         if (!state?.inquiry) this.errorMsg.set('데이터를 불러오지 못했습니다.');
       },
     });

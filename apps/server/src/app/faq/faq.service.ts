@@ -1,8 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Faq, Prisma } from '@generated/prisma';
 import { PrismaService } from '../../prisma/prisma.service';
-import { OffsetPaginationDTO } from '../../libs/dtos/offset-pagination.dto';
+import { PaginatedResult } from '@demo-shop/common';
 import { OffsetSearchOptionDTO } from '../../libs/dtos/search-option.dto';
+import { paginate } from '../../libs/utils/paginate';
 import { CreateFaqDTO } from './dtos/create-faq.dto';
 import { UpdateFaqDTO } from './dtos/update-faq.dto';
 
@@ -24,35 +25,14 @@ export class FaqService {
     };
   }
 
-  private async paginate(
-    where: Prisma.FaqWhereInput,
-    pageNo: number,
-    pageSize: number,
-  ): Promise<OffsetPaginationDTO<Faq>> {
-    const skip = (pageNo - 1) * pageSize;
-    const [totalItems, items] = await Promise.all([
-      this.prisma.faq.count({ where }),
-      this.prisma.faq.findMany({
-        where,
-        skip,
-        take: pageSize,
-        orderBy: [{ isPinned: 'desc' }, { createdAt: 'desc' }],
-      }),
-    ]);
-    return {
-      items,
-      pageInfo: { pageNo, pageSize, totalItems, totalPages: Math.ceil(totalItems / pageSize) },
-    };
+  async search(dto: OffsetSearchOptionDTO): Promise<PaginatedResult<Faq>> {
+    const { pageNo, pageSize, query } = dto;
+    return paginate(this.prisma.faq, this.buildSearchWhere(query), pageNo, pageSize, [{ isPinned: 'desc' }, { createdAt: 'desc' }]);
   }
 
-  async search(dto: OffsetSearchOptionDTO): Promise<OffsetPaginationDTO<Faq>> {
+  async searchPublic(dto: OffsetSearchOptionDTO): Promise<PaginatedResult<Faq>> {
     const { pageNo, pageSize, query } = dto;
-    return this.paginate(this.buildSearchWhere(query), pageNo, pageSize);
-  }
-
-  async searchPublic(dto: OffsetSearchOptionDTO): Promise<OffsetPaginationDTO<Faq>> {
-    const { pageNo, pageSize, query } = dto;
-    return this.paginate({ ...this.buildSearchWhere(query), isExposed: true }, pageNo, pageSize);
+    return paginate(this.prisma.faq, { ...this.buildSearchWhere(query), isExposed: true }, pageNo, pageSize, [{ isPinned: 'desc' }, { createdAt: 'desc' }]);
   }
 
   async findOne(id: number) {

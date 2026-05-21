@@ -1,0 +1,22 @@
+/// 사이트 기본 정보 (단일 행)
+model SiteSettings {
+  id             Int    @id @default(autoincrement())
+  businessName   String @default("")
+  businessNo     String @default("")
+  ceoName        String @default("")
+  address        String @default("")
+  phone          String @default("")
+  email          String @default("")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+/// 관리형 페이지 (약관, 개인정보처리방침, 관람 안내 등)
+model SitePage {
+  id        Int      @id @default(autoincrement())
+  slug      String   @unique
+  title     String
+  content   String   @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

@@ -1,0 +1,84 @@
+<div class="card bg-base-100 shadow-sm">
+  <div class="card-body gap-4">
+
+    <div class="flex gap-2">
+      <input
+        class="input input-bordered flex-1"
+        type="text"
+        [(ngModel)]="reservationNo"
+        placeholder="예약번호를 입력하세요 (예: REG-XXXXX-XXXX)"
+        (keydown.enter)="onSearch()"
+      />
+      <button class="btn btn-primary" [disabled]="loading()" (click)="onSearch()">
+        {{ loading() ? '조회 중...' : '조회' }}
+      </button>
+    </div>
+
+    @if (errorMsg()) {
+      <p class="text-error text-sm">{{ errorMsg() }}</p>
+    }
+
+    @if (result(); as reg) {
+      <div class="divider my-0"></div>
+
+      @if (isEditing()) {
+        <!-- 수정 폼 -->
+        <div class="grid grid-cols-1 gap-3">
+          <label class="form-control">
+            <div class="label px-0 pb-1"><span class="label-text font-medium">이름 *</span></div>
+            <input class="input input-bordered w-full" type="text" [(ngModel)]="editName" maxlength="50" />
+          </label>
+          <label class="form-control">
+            <div class="label px-0 pb-1"><span class="label-text font-medium">연락처 *</span></div>
+            <input class="input input-bordered w-full" type="tel" [value]="editContact" (input)="onContactInput($event)" maxlength="13" />
+          </label>
+        </div>
+
+        @if (saveMsg()) {
+          <p class="text-error text-sm">{{ saveMsg() }}</p>
+        }
+
+        <div class="flex justify-end gap-2">
+          <button class="btn btn-ghost btn-sm" (click)="cancelEdit()">취소</button>
+          <button class="btn btn-primary btn-sm" [disabled]="saving()" (click)="onSave()">
+            {{ saving() ? '저장 중...' : '저장' }}
+          </button>
+        </div>
+
+      } @else {
+        <!-- 조회 결과 -->
+        <div class="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
+          <div>
+            <p class="text-base-content/50 text-xs mb-0.5">예약번호</p>
+            <p class="font-mono font-semibold">{{ reg.reservationNo }}</p>
+          </div>
+          <div>
+            <p class="text-base-content/50 text-xs mb-0.5">등록일</p>
+            <p>{{ reg.createdAt | slice:0:10 }}</p>
+          </div>
+          <div>
+            <p class="text-base-content/50 text-xs mb-0.5">이름</p>
+            <p>{{ reg.name }}</p>
+          </div>
+          <div>
+            <p class="text-base-content/50 text-xs mb-0.5">연락처</p>
+            <p>{{ reg.contact }}</p>
+          </div>
+          <div class="col-span-2">
+            <p class="text-base-content/50 text-xs mb-0.5">참가 박람회</p>
+            <p class="font-medium">{{ reg.fairName }}</p>
+          </div>
+        </div>
+
+        @if (saveMsg()) {
+          <p class="text-success text-sm">{{ saveMsg() }}</p>
+        }
+
+        <div class="flex justify-end">
+          <button class="btn btn-outline btn-sm" (click)="startEdit()">수정</button>
+        </div>
+      }
+    }
+
+  </div>
+</div>

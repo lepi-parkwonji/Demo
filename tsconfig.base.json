@@ -17,7 +17,6 @@
       "@demo-shop/common": ["./libs/common/src/index.ts"],
       "@generated/prisma": ["./generated/prisma/client.ts"],
       "@demo-shop/api-client": ["./libs/api-client/src/index.ts"],
-      "@demo-shop/client-libs": ["./libs/client-libs/src/index.ts"],
       "@demo-shop/ui": ["./libs/ui/src/index.ts"]
     }
   },

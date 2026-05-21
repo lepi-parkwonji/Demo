@@ -1,0 +1,25 @@
+@if (gallery(); as item) {
+  <div class="max-w-3xl mx-auto px-4 py-8 lg:px-0">
+    <button class="btn btn-ghost btn-sm mb-4" (click)="goBack()">
+      ← 갤러리 목록
+    </button>
+
+    <div class="card bg-base-100 shadow-sm">
+      <div class="card-body">
+        <h1 class="text-2xl font-bold mb-1">{{ item.title }}</h1>
+        <div class="flex flex-wrap items-center gap-3 text-sm text-base-content/50 mb-6">
+          @if (item.eventName) {
+            <span class="badge badge-outline badge-sm">{{ item.eventName }}</span>
+          }
+          <span>{{ item.createdAt | slice:0:10 }}</span>
+        </div>
+
+        @if (item.imageUrl) {
+          <img [src]="item.imageUrl" [alt]="item.title" class="w-full rounded-lg object-cover mb-6" />
+        }
+
+        <div class="prose prose-sm max-w-none leading-relaxed" [innerHTML]="item.content"></div>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,41 @@
+<footer class="bg-base-100 border-t border-base-200 mt-12">
+  <div class="max-w-[946px] mx-auto px-4 py-10 lg:px-0">
+
+    <div class="flex flex-col lg:flex-row justify-between gap-8">
+      <!-- 회사 정보 -->
+      <div class="space-y-1 text-sm text-base-content/60">
+        @if (site(); as s) {
+          <p class="text-base font-bold text-base-content mb-3">{{ s.businessName }}</p>
+          <p>대표자: {{ s.ceoName }}</p>
+          <p>사업자등록번호: {{ s.businessNo }}</p>
+          <p>주소: {{ s.address }}</p>
+          <p>전화: {{ s.phone }}</p>
+          <p>이메일: {{ s.email }}</p>
+        }
+      </div>
+
+      <!-- 바로가기 -->
+      <div class="flex gap-12 text-sm">
+        <div class="space-y-2">
+          <p class="font-semibold text-base-content mb-3">메뉴</p>
+          <p><a routerLink="/gallery" class="text-base-content/60 hover:text-primary transition-colors">갤러리</a></p>
+          <p><a routerLink="/pre-registration" class="text-base-content/60 hover:text-primary transition-colors">사전등록</a></p>
+          <p><a routerLink="/customer-service" class="text-base-content/60 hover:text-primary transition-colors">고객센터</a></p>
+        </div>
+        <div class="space-y-2">
+          <p class="font-semibold text-base-content mb-3">약관</p>
+          <p><a routerLink="/terms" class="text-base-content/60 hover:text-primary transition-colors">이용약관</a></p>
+          <p><a routerLink="/privacy" class="text-base-content/60 hover:text-primary transition-colors">개인정보처리방침</a></p>
+          <p><a routerLink="/visitor-guide" class="text-base-content/60 hover:text-primary transition-colors">관람 안내</a></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-t border-base-200 mt-8 pt-6 text-xs text-base-content/40 text-center">
+      @if (site(); as s) {
+        © {{ s.businessName }} All rights reserved.
+      }
+    </div>
+
+  </div>
+</footer>

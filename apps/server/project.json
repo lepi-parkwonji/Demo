@@ -7,6 +7,11 @@
   "targets": {
     "build": {
       "executor": "nx:run-commands",
+      "inputs": [
+        "production",
+        "{workspaceRoot}/generated/prisma/**/*",
+        "{workspaceRoot}/prisma/**/*"
+      ],
       "options": {
         "command": "webpack-cli build",
         "args": ["--node-env=production"],

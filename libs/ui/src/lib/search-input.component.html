@@ -1,7 +1,7 @@
 <div class="relative flex gap-2">
   <div class="relative flex-1">
     <input
-      class="input input-bordered w-full input-sm min-w-0"
+      class="input input-bordered w-full input-sm min-w-0" [class]="inputClass()"
       type="text"
       [ngModel]="value()"
       [placeholder]="placeholder()"

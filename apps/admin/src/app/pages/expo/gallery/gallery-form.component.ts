@@ -4,14 +4,15 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   GalleryResponseDto as GalleryDTO,
+  ScheduleResponseDto as ScheduleDTO,
   galleryControllerCreate,
   galleryControllerFindOne,
-  galleryControllerGetEventNames,
   galleryControllerUpdate,
+  scheduleControllerSearch,
 } from '@demo-shop/api-client';
 import { map } from 'rxjs/operators';
-import { ToastService } from '../../../services/toast.service';
-import { RichEditorComponent } from '../../../shared/rich-editor.component';
+import { ToastService } from '@demo-shop/ui';
+import { RichEditorComponent } from '../../../libs/rich-editor.component';
 
 const TITLE_MAX = 100;
 
@@ -37,15 +38,17 @@ export class GalleryFormComponent implements OnInit {
   title = '';
   content = '';
   eventName = '';
+  imageUrl = '';
+  coverUploading = signal(false);
 
+  schedules = signal<ScheduleDTO[]>([]);
   loading = signal(false);
   errorMsg = signal('');
-  eventNameSuggestions = signal<string[]>([]);
 
   ngOnInit() {
-    galleryControllerGetEventNames(this.http, '').pipe(map(r => r.body.eventNames ?? [])).subscribe({
-      next: (names) => this.eventNameSuggestions.set(names),
-    });
+    scheduleControllerSearch(this.http, '', { pageNo: 1, pageSize: 100 })
+      .pipe(map(r => r.body.items))
+      .subscribe({ next: items => this.schedules.set(items) });
 
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam) {
@@ -67,22 +70,43 @@ export class GalleryFormComponent implements OnInit {
     this.title = gallery.title;
     this.content = gallery.content;
     this.eventName = gallery.eventName ?? '';
+    this.imageUrl = gallery.imageUrl ?? '';
   }
 
   navigateBack() {
     this.router.navigate(['/expo/gallery']);
   }
 
+  onCoverImageChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    this.coverUploading.set(true);
+    const formData = new FormData();
+    formData.append('file', file);
+
+    this.http.post<{ url: string }>(this.imageUploadUrl, formData).subscribe({
+      next: (res) => { this.imageUrl = res.url; this.coverUploading.set(false); },
+      error: () => { this.toast.error('이미지 업로드에 실패했습니다.'); this.coverUploading.set(false); },
+    });
+  }
+
+  removeCoverImage() {
+    this.imageUrl = '';
+  }
+
   onSubmit() {
     if (!this.title.trim()) { this.errorMsg.set('갤러리명을 입력해주세요.'); return; }
-    if (!this.editorRef.getText().trim()) { this.errorMsg.set('내용을 입력해주세요.'); return; }
 
     this.loading.set(true);
     this.errorMsg.set('');
 
     const body = {
+      category: 'GALLERY' as const,
       title: this.title.trim(),
       content: this.content,
+      imageUrl: this.imageUrl || undefined,
       eventName: this.eventName.trim() || undefined,
     };
 

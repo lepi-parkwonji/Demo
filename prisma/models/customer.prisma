@@ -1,9 +1,9 @@
 /// 고객 (클라이언트)
 model Customer {
-  id            Int      @id @default(autoincrement())
+  id            String   @id @default(uuid())
   provider      String   @default("LOCAL") // 'LOCAL', 'KAKAO', etc.
   oauthId       String?  @unique
-  password      String?
+  refreshToken  String?
   email         String?  @unique
   nickname      String
   profileImage  String?

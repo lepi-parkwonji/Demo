@@ -1,7 +1,7 @@
 import { Component, DestroyRef, inject, signal, computed } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FaqDTO, PaginatedResult, PublicApiService } from '../../../services/public-api.service';
-import { PaginationComponent } from '../../../shared/pagination.component';
+import { PaginationComponent } from '@demo-shop/ui';
 import { SearchInputComponent, SearchSuggestion } from '@demo-shop/ui';
 
 @Component({

@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, DestroyRef, inject, signal, effect, computed } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink, Router } from '@angular/router';
-import { PaginationComponent } from '../../../shared/pagination.component';
+import { PaginationComponent } from '@demo-shop/ui';
 import { SearchInputComponent, SearchSuggestion } from '@demo-shop/ui';
 import { HttpClient } from '@angular/common/http';
 import { InquiryResponseDto } from '@demo-shop/api-client';

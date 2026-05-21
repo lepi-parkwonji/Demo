@@ -1,0 +1,11 @@
+@if (banner(); as b) {
+  @if (b.linkUrl) {
+    <a [href]="b.linkUrl" target="_blank" rel="noopener" class="block w-full">
+      <img [src]="b.imageUrl" alt="배너" class="w-full object-cover" style="max-height: 160px;">
+    </a>
+  } @else {
+    <div class="w-full">
+      <img [src]="b.imageUrl" alt="배너" class="w-full object-cover" style="max-height: 160px;">
+    </div>
+  }
+}

@@ -6,7 +6,7 @@
           <h2 class="text-xl font-bold">{{ notice()!.title }}</h2>
           <p class="text-sm text-base-content/50 mt-1">{{ notice()!.createdAt | slice:0:10 }}</p>
         </div>
-        <div class="whitespace-pre-wrap leading-relaxed">{{ notice()!.content }}</div>
+        <div class="prose prose-sm max-w-none leading-relaxed text-sm [&_*]:text-sm" [innerHTML]="notice()!.content"></div>
       </div>
     </div>
     <div class="mt-4">

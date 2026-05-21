@@ -1,4 +1,4 @@
-<div class="w-full max-w-6xl pb-10">
+<div class="w-full max-w-6xl pb-10 mx-auto">
   <div class="bg-base-100 rounded-box shadow-sm border border-base-200 overflow-hidden">
     <!-- Header -->
     <div class="p-6 border-b border-base-200 flex items-center justify-center relative bg-base-50">
@@ -12,7 +12,7 @@
       </h3>
     </div>
 
-    <div class="p-8 space-y-10">
+    <div class="p-8 space-y-6">
 
       <!-- 관리자 전용 영역 (수정 모드에서만) -->
       @if (!isNew()) {
@@ -63,7 +63,9 @@
           </div>
           <div class="form-control col-span-2">
             <label for="business-reg-number" class="label pb-1"><span class="label-text text-base-content/50">사업자등록번호</span></label>
-            <input id="business-reg-number" type="text" class="input input-bordered w-full font-mono" [(ngModel)]="businessRegNumber" placeholder="000-00-00000" />
+            <input id="business-reg-number" type="text" class="input input-bordered w-full font-mono"
+              [value]="businessRegNumber" (input)="formatBusinessRegNumber($event)"
+              placeholder="000-00-00000" maxlength="12" inputmode="numeric" />
           </div>
           <div class="form-control">
             <label for="manager-name" class="label pb-1"><span class="label-text text-base-content/50">담당자 (이름/직급)</span></label>
@@ -71,7 +73,9 @@
           </div>
           <div class="form-control">
             <label for="contact" class="label pb-1"><span class="label-text text-base-content/50">담당자 연락처</span></label>
-            <input id="contact" type="text" class="input input-bordered w-full" [(ngModel)]="contact" placeholder="010-0000-0000" />
+            <input id="contact" type="text" class="input input-bordered w-full"
+              [value]="contact" (input)="formatContact($event)"
+              placeholder="010-0000-0000" maxlength="13" inputmode="numeric" />
           </div>
           <div class="form-control col-span-2">
             <label for="email" class="label pb-1"><span class="label-text text-base-content/50">세금계산서 수신 이메일</span></label>

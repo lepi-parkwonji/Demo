@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query } from '@nestjs/common';
 import { ApiBody, ApiBearerAuth, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
-import { Auth } from '../../libs/decorators/auth.decorator';
+import { AdminAuth } from '../auth/decorators/admin-auth.decorator';
 import { OffsetSearchOptionDTO } from '../../libs/dtos/search-option.dto';
 import { ApiPaginatedResponse } from '../../libs/swagger/api-paginated-response.decorator';
 import { ApiSearchQuery } from '../../libs/swagger/api-search-query.decorator';
@@ -28,35 +28,35 @@ export class FaqController {
 
   @ApiBearerAuth() @ApiOkResponse({ type: FaqResponseDTO }) @ApiBody({ type: CreateFaqDTO })
   @Post()
-  @Auth()
+  @AdminAuth()
   create(@Body() dto: CreateFaqDTO) {
     return this.faqService.create(dto);
   }
 
   @ApiBearerAuth() @ApiOkResponse({ type: FaqResponseDTO }) @ApiBody({ type: UpdateFaqDTO }) @ApiParam({ name: 'id', type: Number })
   @Patch(':id')
-  @Auth()
+  @AdminAuth()
   update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateFaqDTO) {
     return this.faqService.update(id, dto);
   }
 
   @ApiBearerAuth() @ApiOkResponse({ type: FaqResponseDTO }) @ApiParam({ name: 'id', type: Number })
   @Delete(':id')
-  @Auth()
+  @AdminAuth()
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.faqService.remove(id);
   }
 
   @ApiBearerAuth() @ApiOkResponse({ type: FaqResponseDTO }) @ApiParam({ name: 'id', type: Number })
   @Patch(':id/pin')
-  @Auth()
+  @AdminAuth()
   togglePin(@Param('id', ParseIntPipe) id: number) {
     return this.faqService.togglePin(id);
   }
 
   @ApiBearerAuth() @ApiOkResponse({ type: FaqResponseDTO }) @ApiParam({ name: 'id', type: Number })
   @Patch(':id/expose')
-  @Auth()
+  @AdminAuth()
   toggleExpose(@Param('id', ParseIntPipe) id: number) {
     return this.faqService.toggleExpose(id);
   }

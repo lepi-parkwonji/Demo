@@ -1,15 +1,22 @@
-/// 갤러리
+enum GalleryCategory {
+  GALLERY
+  PRESS
+}
+
+/// 갤러리 / 보도자료
 model Gallery {
-  id           Int       @id @default(autoincrement())
+  id           Int             @id @default(autoincrement())
+  category     GalleryCategory @default(PRESS)
   title        String
   content      String
   imageUrl     String?
   videoUrl     String?
-  keywords     String[]  @default([])
+  keywords     String[]        @default([])
   eventName    String?
   shootingDate String?
-  isExposed    Boolean   @default(false)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  isPinned     Boolean         @default(false)
+  isExposed    Boolean         @default(false)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
   deletedAt    DateTime?
 }

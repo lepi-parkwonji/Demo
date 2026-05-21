@@ -1,0 +1,47 @@
+<div class="w-full max-w-2xl mx-auto">
+  <div class="mb-5">
+    <h2 class="text-xl font-bold">기본 정보</h2>
+  </div>
+
+  <div class="card bg-base-100 shadow-sm">
+    <div class="card-body gap-4 flex flex-col">
+
+      <label class="form-control">
+        <div class="label px-0 pb-2"><span class="label-text font-medium">상호명</span></div>
+        <input class="input input-bordered w-full" type="text" [(ngModel)]="businessName" placeholder="상호명을 입력하세요" maxlength="100" />
+      </label>
+
+      <label class="form-control">
+        <div class="label px-0 pb-2"><span class="label-text font-medium">사업자등록번호</span></div>
+        <input class="input input-bordered w-full" type="text" [(ngModel)]="businessNo" placeholder="000-00-00000" maxlength="12" inputmode="numeric" />
+      </label>
+
+      <label class="form-control">
+        <div class="label px-0 pb-2"><span class="label-text font-medium">대표자명</span></div>
+        <input class="input input-bordered w-full" type="text" [(ngModel)]="ceoName" placeholder="대표자명을 입력하세요" maxlength="50" />
+      </label>
+
+      <label class="form-control">
+        <div class="label px-0 pb-2"><span class="label-text font-medium">주소</span></div>
+        <input class="input input-bordered w-full" type="text" [(ngModel)]="address" placeholder="주소를 입력하세요" maxlength="200" />
+      </label>
+
+      <label class="form-control">
+        <div class="label px-0 pb-2"><span class="label-text font-medium">대표전화</span></div>
+        <input class="input input-bordered w-full" type="text" [(ngModel)]="phone" placeholder="02-0000-0000" maxlength="13" inputmode="numeric" />
+      </label>
+
+      <label class="form-control">
+        <div class="label px-0 pb-2"><span class="label-text font-medium">이메일</span></div>
+        <input class="input input-bordered w-full" type="email" [(ngModel)]="email" placeholder="example@example.com" maxlength="100" />
+      </label>
+
+      <div class="flex justify-end pt-2">
+        <button class="btn btn-primary" [disabled]="saving()" (click)="onSubmit()">
+          {{ saving() ? '저장 중...' : '저장' }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>

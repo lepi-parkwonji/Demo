@@ -1,0 +1,12 @@
+/// 사전 등록
+model Registration {
+  id               Int       @id @default(autoincrement())
+  reservationNo    String    @unique
+  name             String
+  contact          String
+  fairName         String
+  marketingConsent Boolean   @default(false)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  deletedAt        DateTime?
+}

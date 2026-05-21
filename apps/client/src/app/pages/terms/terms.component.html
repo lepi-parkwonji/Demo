@@ -1,0 +1,10 @@
+<div class="max-w-3xl mx-auto px-4 py-8 lg:px-0">
+  @if (page(); as p) {
+    <h1 class="text-2xl font-bold mb-8">{{ p.title }}</h1>
+    <div class="prose prose-sm max-w-none leading-relaxed" [innerHTML]="p.content"></div>
+  } @else if (error()) {
+    <div class="text-center py-20 text-base-content/40">내용을 불러올 수 없습니다.</div>
+  } @else {
+    <div class="flex justify-center py-20"><span class="loading loading-spinner"></span></div>
+  }
+</div>

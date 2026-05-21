@@ -1,8 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma, Notice } from '@generated/prisma';
 import { PrismaService } from '../../prisma/prisma.service';
-import { OffsetPaginationDTO } from '../../libs/dtos/offset-pagination.dto';
+import { PaginatedResult } from '@demo-shop/common';
 import { OffsetSearchOptionDTO } from '../../libs/dtos/search-option.dto';
+import { paginate } from '../../libs/utils/paginate';
 import { CreateNoticeDTO } from './dtos/create-notice.dto';
 import { UpdateNoticeDTO } from './dtos/update-notice.dto';
 
@@ -24,35 +25,14 @@ export class NoticeService {
     };
   }
 
-  private async paginate(
-    where: Prisma.NoticeWhereInput,
-    pageNo: number,
-    pageSize: number,
-  ): Promise<OffsetPaginationDTO<Notice>> {
-    const skip = (pageNo - 1) * pageSize;
-    const [totalItems, items] = await Promise.all([
-      this.prisma.notice.count({ where }),
-      this.prisma.notice.findMany({
-        where,
-        skip,
-        take: pageSize,
-        orderBy: [{ isPinned: 'desc' }, { createdAt: 'desc' }],
-      }),
-    ]);
-    return {
-      items,
-      pageInfo: { pageNo, pageSize, totalItems, totalPages: Math.ceil(totalItems / pageSize) },
-    };
+  async search(dto: OffsetSearchOptionDTO): Promise<PaginatedResult<Notice>> {
+    const { pageNo, pageSize, query } = dto;
+    return paginate(this.prisma.notice, this.buildSearchWhere(query), pageNo, pageSize, [{ isPinned: 'desc' }, { createdAt: 'desc' }]);
   }
 
-  async search(dto: OffsetSearchOptionDTO): Promise<OffsetPaginationDTO<Notice>> {
+  async searchPublic(dto: OffsetSearchOptionDTO): Promise<PaginatedResult<Notice>> {
     const { pageNo, pageSize, query } = dto;
-    return this.paginate(this.buildSearchWhere(query), pageNo, pageSize);
-  }
-
-  async searchPublic(dto: OffsetSearchOptionDTO): Promise<OffsetPaginationDTO<Notice>> {
-    const { pageNo, pageSize, query } = dto;
-    return this.paginate({ ...this.buildSearchWhere(query), isExposed: true }, pageNo, pageSize);
+    return paginate(this.prisma.notice, { ...this.buildSearchWhere(query), isExposed: true }, pageNo, pageSize, [{ isPinned: 'desc' }, { createdAt: 'desc' }]);
   }
 
   async findOne(id: number) {

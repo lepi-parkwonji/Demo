@@ -1,0 +1,130 @@
+<!-- 전시 개요 -->
+<section class="py-16 bg-white">
+  <div class="max-w-6xl mx-auto px-6 lg:px-0">
+
+    <div class="text-center mb-12">
+      <h2 class="text-[28px] font-bold tracking-tight mb-2">전시 개요</h2>
+      <div class="w-10 h-[3px] bg-primary mx-auto"></div>
+    </div>
+
+    @if (loading()) {
+      <div class="flex justify-center py-20">
+        <span class="loading loading-spinner loading-lg text-primary"></span>
+      </div>
+    } @else if (schedule(); as s) {
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch">
+
+        <!-- 왼쪽: 이미지 + 버튼 -->
+        <div class="flex flex-col">
+          @if (introImage()) {
+            <img [src]="introImage()" alt="전시소개 이미지" class="w-full flex-1 min-h-0 object-cover">
+          } @else {
+            <div class="w-full flex-1 min-h-0 bg-gray-100 flex flex-col items-center justify-center text-gray-400 gap-2" style="min-height: 200px">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 00-1-1h-2a1 1 0 00-1 1v5m4 0H9" />
+              </svg>
+              <span class="text-sm">의료서비스 박람회</span>
+            </div>
+          }
+          <div class="grid grid-cols-2 mt-1">
+            <button class="bg-gray-900 text-white text-sm py-4 px-5 hover:bg-gray-700 transition-colors font-medium text-center">
+              브로쇼어 &amp; 결과보고서 ↓
+            </button>
+            <a routerLink="/pre-registration/form"
+               class="border border-gray-900 text-gray-900 text-sm py-4 px-5 hover:bg-gray-50 transition-colors font-medium text-center">
+              사전등록 신청 →
+            </a>
+          </div>
+        </div>
+
+        <!-- 오른쪽: 전시 정보 표 -->
+        <div class="border-t border-gray-400">
+          <div class="flex py-4 border-b border-gray-200 gap-6 text-sm">
+            <span class="w-14 shrink-0 font-semibold text-gray-500">명칭</span>
+            <span class="text-gray-900">{{ s.fairName }}</span>
+          </div>
+          <div class="flex py-4 border-b border-gray-200 gap-6 text-sm">
+            <span class="w-14 shrink-0 font-semibold text-gray-500">기간</span>
+            <span class="text-gray-900">
+              {{ s.startTime | date:'yyyy년 M월 d일(EEE)':'':'ko' }} ~
+              {{ s.endTime | date:'M월 d일(EEE)':'':'ko' }}
+            </span>
+          </div>
+          <div class="flex py-4 border-b border-gray-200 gap-6 text-sm">
+            <span class="w-14 shrink-0 font-semibold text-gray-500">시간</span>
+            <span class="text-gray-900">
+              {{ s.startTime | date:'HH:mm':'':'ko' }} ~ {{ s.endTime | date:'HH:mm':'':'ko' }}
+            </span>
+          </div>
+          <div class="flex py-4 border-b border-gray-200 gap-6 text-sm">
+            <span class="w-14 shrink-0 font-semibold text-gray-500">장소</span>
+            <span class="text-gray-900">{{ s.place }}</span>
+          </div>
+          <div class="flex py-4 border-b border-gray-200 gap-6 text-sm">
+            <span class="w-14 shrink-0 font-semibold text-gray-500">지역</span>
+            <span class="text-gray-900">{{ s.region }}</span>
+          </div>
+          <div class="flex py-4 border-b border-gray-200 gap-6 text-sm">
+            <span class="w-14 shrink-0 font-semibold text-gray-500">입장료</span>
+            <span class="text-gray-900">
+              {{ s.entranceFee > 0 ? ((s.entranceFee | number) + '원') : '무료' }}
+            </span>
+          </div>
+          <div class="flex py-4 border-b border-gray-200 gap-6 text-sm">
+            <span class="w-14 shrink-0 font-semibold text-gray-500">주최</span>
+            <span class="text-gray-900">대한의료서비스협회</span>
+          </div>
+          <div class="flex py-4 border-b border-gray-200 gap-6 text-sm">
+            <span class="w-14 shrink-0 font-semibold text-gray-500">주관</span>
+            <span class="text-gray-900">(주)메디파이, 미래의료산업협의회</span>
+          </div>
+          <div class="flex py-4 border-b border-gray-200 gap-6 text-sm">
+            <span class="w-14 shrink-0 font-semibold text-gray-500">인증</span>
+            <span class="text-gray-900">국제인증전시회플러스</span>
+          </div>
+        </div>
+      </div>
+    } @else {
+      <div class="text-center py-20 text-gray-400">전시 정보를 불러올 수 없습니다.</div>
+    }
+  </div>
+</section>
+
+<!-- 관람객 현황 -->
+<section class="py-16 bg-white">
+  <div class="max-w-6xl mx-auto px-6 lg:px-0">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+      <!-- 종사분야 -->
+      <div class="border border-gray-200 p-8">
+        <h3 class="text-xl font-bold mb-6">종사분야</h3>
+        @for (item of occupations; track item.label) {
+          <div class="mb-4">
+            <p class="text-sm text-gray-700 mb-1">{{ item.label }} {{ item.percent }}%</p>
+            <div class="h-[6px] bg-gray-100">
+              <div class="h-[6px] bg-primary" [style.width.%]="item.percent"></div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- 관심분야 -->
+      <div class="border border-gray-200 p-8">
+        <h3 class="text-xl font-bold mb-6">관심분야</h3>
+        <div class="flex justify-center mb-6">
+          <div class="relative w-44 h-44 rounded-full" style="background: conic-gradient(#0e7490 0% 26%, #0891b2 26% 46%, #06b6d4 46% 61%, #67e8f9 61% 72%, #a5f3fc 72% 82%, #94a3b8 82% 90%, #cbd5e1 90% 100%);">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="w-24 h-24 bg-white rounded-full"></div>
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          @for (tag of interests; track tag; let i = $index) {
+            <span class="px-3 py-1 text-xs font-medium" [ngClass]="tagClass(i)">{{ tag }}</span>
+          }
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

@@ -9,8 +9,8 @@ import {
   faqControllerUpdate,
 } from '@demo-shop/api-client';
 import { map } from 'rxjs/operators';
-import { ToastService } from '../../../services/toast.service';
-import { RichEditorComponent } from '../../../shared/rich-editor.component';
+import { ToastService } from '@demo-shop/ui';
+import { RichEditorComponent } from '../../../libs/rich-editor.component';
 
 const QUESTION_MAX = 200;
 
@@ -54,8 +54,7 @@ export class FaqFormComponent implements OnInit {
         this.question = faq.question;
         this.answer = faq.answer;
       },
-      error: (error) => {
-        console.error('[faq findOne]', error);
+      error: () => {
         if (!state?.faq) {
           this.errorMsg.set('데이터를 불러오지 못했습니다.');
         }
@@ -90,7 +89,6 @@ export class FaqFormComponent implements OnInit {
         this.router.navigate(['/customer/faq']);
       },
       error: (error) => {
-        console.error('[faq save]', error);
         const status = error?.status;
         if (status === 401) this.errorMsg.set('인증이 만료되었습니다. 다시 로그인해주세요.');
         else if (status === 404) this.errorMsg.set('FAQ를 찾을 수 없습니다.');

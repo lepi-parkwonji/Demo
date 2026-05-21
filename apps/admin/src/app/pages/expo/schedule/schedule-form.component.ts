@@ -9,7 +9,7 @@ import {
   scheduleControllerUpdate,
 } from '@demo-shop/api-client';
 import { map } from 'rxjs/operators';
-import { ToastService } from '../../../services/toast.service';
+import { ToastService } from '@demo-shop/ui';
 
 @Component({
   selector: 'app-schedule-form',
@@ -53,8 +53,7 @@ export class ScheduleFormComponent implements OnInit {
 
     scheduleControllerFindOne(this.http, '', { id: this.scheduleId }).pipe(map(r => r.body)).subscribe({
       next: (data) => this.fillForm(data),
-      error: (error) => {
-        console.error('[schedule findOne]', error);
+      error: () => {
         if (!state?.schedule) this.errorMsg.set('데이터를 불러오지 못했습니다.');
       },
     });
@@ -114,7 +113,6 @@ export class ScheduleFormComponent implements OnInit {
         this.router.navigate(['/expo/schedule']);
       },
       error: (error) => {
-        console.error('[schedule save]', error);
         const status = error?.status;
         if (status === 401) this.errorMsg.set('인증이 만료되었습니다. 다시 로그인해주세요.');
         else if (status === 404) this.errorMsg.set('박람회를 찾을 수 없습니다.');

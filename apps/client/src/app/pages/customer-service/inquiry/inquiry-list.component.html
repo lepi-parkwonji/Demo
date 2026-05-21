@@ -11,6 +11,7 @@
   <div class="flex gap-2 mb-4">
     <app-search-input
       class="flex-1 min-w-0"
+      inputClass="text-sm"
       placeholder="제목 검색"
       [suggestions]="suggestions()"
       (queryChange)="onQueryChange($event)"
@@ -24,29 +25,29 @@
     <table class="table table-zebra">
       <thead>
         <tr>
-          <th class="w-16 hidden sm:table-cell">번호</th>
+          <th class="w-16 hidden sm:table-cell text-center">번호</th>
           <th>제목</th>
           <th class="w-32 hidden sm:table-cell">작성자</th>
-          <th class="w-28 hidden sm:table-cell">작성일</th>
+          <th class="w-28 hidden sm:table-cell text-center">작성일</th>
         </tr>
       </thead>
       <tbody>
         @for (item of result()?.items; track item.id) {
           <tr class="cursor-pointer hover" [routerLink]="[item.id]">
-            <td class="text-sm text-base-content/50 hidden sm:table-cell">{{ item.id }}</td>
+            <td class="text-sm text-base-content/50 hidden sm:table-cell text-center">{{ item.id }}</td>
             <td>
               @if (item.isSecret) {
                 <span class="mr-1">🔒</span>
               }
-              <span class="font-medium">{{ item.title }}</span>
+              <span class="text-[15px] font-medium">{{ item.title }}</span>
               @if (item.isAnswered) {
-                <span class="badge badge-success badge-xs ml-2 text-white">답변완료</span>
+                <span class="badge badge-success badge-sm ml-2 text-white">답변완료</span>
               } @else {
-                <span class="badge badge-ghost badge-xs ml-2">대기중</span>
+                <span class="badge badge-ghost badge-sm ml-2">대기중</span>
               }
             </td>
             <td class="text-sm text-base-content/60 hidden sm:table-cell">{{ item.authorName }}</td>
-            <td class="text-sm text-base-content/60 hidden sm:table-cell">{{ item.createdAt | date:'yyyy-MM-dd' }}</td>
+            <td class="text-sm text-base-content/60 hidden sm:table-cell text-center">{{ item.createdAt | date:'yyyy-MM-dd' }}</td>
           </tr>
         } @empty {
           <tr><td colspan="4" class="text-center text-base-content/40 py-10">등록된 문의내역이 없습니다.</td></tr>

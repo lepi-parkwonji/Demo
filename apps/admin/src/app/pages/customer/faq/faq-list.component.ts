@@ -13,8 +13,8 @@ import {
 } from '@demo-shop/api-client';
 import { PaginatedResult } from '@demo-shop/common';
 import { map } from 'rxjs/operators';
-import { ToastService } from '../../../services/toast.service';
-import { PaginationComponent } from '../../../shared/pagination.component';
+import { ToastService } from '@demo-shop/ui';
+import { PaginationComponent } from '@demo-shop/ui';
 
 @Component({
   selector: 'app-faq-list',

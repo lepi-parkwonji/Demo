@@ -1,6 +1,7 @@
 <div>
   <div class="mb-4">
     <app-search-input
+      inputClass="text-sm"
       placeholder="질문 또는 답변 검색"
       [suggestions]="suggestions()"
       (queryChange)="onQueryChange($event)"
@@ -17,15 +18,13 @@
         @for (item of result()?.items; track item.id) {
           <div class="collapse collapse-arrow">
             <input type="checkbox" />
-            <div class="collapse-title font-medium flex items-center gap-2">
+            <div class="collapse-title text-[15px] font-medium flex items-center gap-2">
               @if (item.isPinned) {
-                <span class="badge badge-warning badge-xs shrink-0">고정</span>
+                <span class="badge badge-warning badge-sm shrink-0">고정</span>
               }
               {{ item.question }}
             </div>
-            <div class="collapse-content text-base-content/70 leading-relaxed">
-              <p class="whitespace-pre-wrap">{{ item.answer }}</p>
-            </div>
+            <div class="collapse-content text-base-content/70 leading-relaxed prose prose-sm max-w-none" [innerHTML]="item.answer"></div>
           </div>
         }
       </div>

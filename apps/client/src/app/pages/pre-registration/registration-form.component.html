@@ -1,0 +1,101 @@
+@if (result(); as reg) {
+  <div class="card bg-base-100 shadow-sm text-center py-12 px-8">
+    <div class="text-success text-5xl mb-4">✓</div>
+    <h2 class="text-2xl font-bold mb-2">사전등록이 완료되었습니다!</h2>
+    <p class="text-base-content/60 mb-6">아래 예약번호를 저장해두세요.</p>
+    <div class="bg-base-200 rounded-xl py-4 px-6 inline-block mx-auto">
+      <p class="text-xs text-base-content/50 mb-1">예약번호</p>
+      <p class="text-2xl font-mono font-bold tracking-widest">{{ reg.reservationNo }}</p>
+    </div>
+    <p class="text-sm text-base-content/50 mt-6">{{ reg.fairName }} 행사에서 뵙겠습니다.</p>
+  </div>
+
+} @else {
+  <div class="card bg-base-100 shadow-sm">
+    <div class="card-body gap-4">
+
+      <label class="form-control">
+        <div class="label px-0 pb-2"><span class="label-text font-medium">이름 *</span></div>
+        <input class="input input-bordered w-full" type="text" [(ngModel)]="name" placeholder="이름을 입력하세요" maxlength="50" />
+      </label>
+
+      <label class="form-control">
+        <div class="label px-0 pb-2"><span class="label-text font-medium">연락처 *</span></div>
+        <input class="input input-bordered w-full" type="tel" [value]="contact" (input)="onContactInput($event)" placeholder="010-0000-0000" maxlength="13" />
+      </label>
+
+      <label class="form-control">
+        <div class="label px-0 pb-2"><span class="label-text font-medium">참가 박람회 *</span></div>
+        <select class="select select-bordered w-full" [(ngModel)]="fairName">
+          <option value="">박람회를 선택하세요</option>
+          @for (s of schedules(); track s.id) {
+            <option [value]="s.fairName">{{ s.fairName }} ({{ s.year }} · {{ s.region }})</option>
+          }
+        </select>
+      </label>
+
+      <div class="divider my-0"></div>
+
+      <div class="flex items-start gap-3">
+        <input type="checkbox" class="checkbox checkbox-sm mt-0.5 shrink-0" [(ngModel)]="privacyConsent" />
+        <span class="text-sm flex-1">
+          <span class="font-medium">[필수] 개인정보 수집 및 이용 동의</span>
+          <button type="button" class="btn btn-ghost btn-xs text-primary ml-1 px-1" (click)="openPrivacyModal()">전문보기</button><br />
+          <span class="text-base-content/50">이름, 연락처를 행사 사전등록 목적으로 수집합니다.</span>
+        </span>
+      </div>
+
+      <div class="flex items-start gap-3">
+        <input type="checkbox" class="checkbox checkbox-sm mt-0.5 shrink-0" [(ngModel)]="marketingConsent" />
+        <span class="text-sm flex-1">
+          <span class="font-medium">[선택] 마케팅 정보 수신 동의</span>
+          <button type="button" class="btn btn-ghost btn-xs text-primary ml-1 px-1" (click)="openMarketingModal()">전문보기</button><br />
+          <span class="text-base-content/50">박람회 행사 소식 및 이벤트 안내를 받으실 수 있습니다.</span>
+        </span>
+      </div>
+
+  <!-- 개인정보 수집 및 이용 동의 모달 -->
+  <div class="modal" [class.modal-open]="privacyModal()">
+    <div class="modal-box max-w-lg">
+      <h3 class="font-bold text-lg mb-4">{{ privacyPage()?.title || '개인정보 수집 및 이용 동의' }}</h3>
+      @if (privacyPage()?.content) {
+        <div class="prose prose-sm max-w-none max-h-96 overflow-y-auto" [innerHTML]="privacyPage()!.content"></div>
+      } @else {
+        <div class="flex justify-center py-8"><span class="loading loading-spinner"></span></div>
+      }
+      <div class="modal-action">
+        <button type="button" class="btn btn-primary" (click)="privacyModal.set(false)">확인</button>
+      </div>
+    </div>
+    <button type="button" class="modal-backdrop" aria-label="닫기" (click)="privacyModal.set(false)"></button>
+  </div>
+
+  <!-- 마케팅 정보 수신 동의 모달 -->
+  <div class="modal" [class.modal-open]="marketingModal()">
+    <div class="modal-box max-w-lg">
+      <h3 class="font-bold text-lg mb-4">{{ marketingPage()?.title || '마케팅 정보 수신 동의' }}</h3>
+      @if (marketingPage()?.content) {
+        <div class="prose prose-sm max-w-none max-h-96 overflow-y-auto" [innerHTML]="marketingPage()!.content"></div>
+      } @else {
+        <div class="flex justify-center py-8"><span class="loading loading-spinner"></span></div>
+      }
+      <div class="modal-action">
+        <button type="button" class="btn btn-primary" (click)="marketingModal.set(false)">확인</button>
+      </div>
+    </div>
+    <button type="button" class="modal-backdrop" aria-label="닫기" (click)="marketingModal.set(false)"></button>
+  </div>
+
+      @if (errorMsg()) {
+        <p class="text-error text-sm">{{ errorMsg() }}</p>
+      }
+
+      <div class="pt-2">
+        <button class="btn btn-primary w-full" [disabled]="loading()" (click)="onSubmit()">
+          {{ loading() ? '등록 중...' : '사전등록 신청' }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+}

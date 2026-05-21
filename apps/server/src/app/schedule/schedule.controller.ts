@@ -4,7 +4,7 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiOkResponse, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ScheduleStatus } from '@generated/prisma';
-import { Auth } from '../../libs/decorators/auth.decorator';
+import { AdminAuth } from '../auth/decorators/admin-auth.decorator';
 import { ApiPaginatedResponse } from '../../libs/swagger/api-paginated-response.decorator';
 import { ApiSearchQuery } from '../../libs/swagger/api-search-query.decorator';
 import { CreateScheduleDTO } from './dtos/create-schedule.dto';
@@ -23,7 +23,7 @@ export class ScheduleController {
   @ApiQuery({ name: 'year', required: false, type: Number })
   @ApiQuery({ name: 'region', required: false, type: String })
   @Get('search')
-  @Auth()
+  @AdminAuth()
   search(
     @Query('pageNo') pageNo = 1,
     @Query('pageSize') pageSize = 10,
@@ -44,35 +44,35 @@ export class ScheduleController {
 
   @ApiOkResponse({ type: ScheduleResponseDTO }) @ApiParam({ name: 'id', type: Number })
   @Get(':id')
-  @Auth()
+  @AdminAuth()
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.scheduleService.findOne(id);
   }
 
   @ApiOkResponse({ type: ScheduleResponseDTO }) @ApiBody({ type: CreateScheduleDTO })
   @Post()
-  @Auth()
+  @AdminAuth()
   create(@Body() dto: CreateScheduleDTO) {
     return this.scheduleService.create(dto);
   }
 
   @ApiOkResponse({ type: ScheduleResponseDTO }) @ApiBody({ type: UpdateScheduleDTO }) @ApiParam({ name: 'id', type: Number })
   @Patch(':id')
-  @Auth()
+  @AdminAuth()
   update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateScheduleDTO) {
     return this.scheduleService.update(id, dto);
   }
 
   @ApiOkResponse({ type: ScheduleResponseDTO }) @ApiParam({ name: 'id', type: Number })
   @Delete(':id')
-  @Auth()
+  @AdminAuth()
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.scheduleService.remove(id);
   }
 
   @ApiOkResponse({ type: ScheduleResponseDTO }) @ApiParam({ name: 'id', type: Number })
   @Patch(':id/expose')
-  @Auth()
+  @AdminAuth()
   toggleExpose(@Param('id', ParseIntPipe) id: number) {
     return this.scheduleService.toggleExpose(id);
   }

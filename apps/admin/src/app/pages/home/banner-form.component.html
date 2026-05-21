@@ -1,0 +1,107 @@
+<div class="w-full max-w-2xl pb-10 mx-auto">
+  <div class="bg-base-100 rounded-box shadow-sm border border-base-200 overflow-hidden">
+
+    <!-- 헤더 -->
+    <div class="p-6 border-b border-base-200 flex items-center justify-center relative bg-base-50">
+      <button class="btn btn-sm btn-ghost btn-circle absolute left-6" (click)="navigateBack()">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+      </button>
+      <h3 class="text-xl font-bold text-base-content">
+        {{ isEdit ? typeLabel + ' 수정' : typeLabel + ' 추가' }}
+      </h3>
+    </div>
+
+    <div class="p-8">
+      <div class="grid grid-cols-[7rem_1fr] items-start gap-x-6 gap-y-5">
+
+        <!-- 구분 -->
+        <span class="label-text font-medium pt-1">구분</span>
+        <div class="badge badge-outline badge-lg">{{ typeLabel }}</div>
+
+        <!-- 이미지 -->
+        <span class="label-text font-medium pt-1">이미지</span>
+        <div>
+          @if (imageUrl) {
+            <div class="relative mb-3 w-fit">
+              <img [src]="imageUrl" alt="배너 이미지" class="max-h-44 rounded-lg border border-base-200 object-cover">
+              <button type="button"
+                class="btn btn-xs btn-circle btn-error absolute -top-2 -right-2"
+                (click)="imageUrl = ''">✕</button>
+            </div>
+          }
+          <label class="btn btn-sm btn-outline w-fit" [class.loading]="uploading() === 'image'">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+            </svg>
+            {{ uploading() === 'image' ? '업로드 중...' : '이미지 선택' }}
+            <input type="file" class="hidden" accept="image/*" (change)="onImageSelect($event)" [disabled]="!!uploading()">
+          </label>
+        </div>
+
+        <!-- 동영상 (HERO만) -->
+        @if (type === 'HERO') {
+          <span class="label-text font-medium pt-1">동영상</span>
+          <div>
+            @if (videoUrl) {
+              <div class="relative mb-3 w-fit">
+                <video [src]="videoUrl" class="max-h-44 rounded-lg border border-base-200" controls muted></video>
+                <button type="button"
+                  class="btn btn-xs btn-circle btn-error absolute -top-2 -right-2"
+                  (click)="videoUrl = ''">✕</button>
+              </div>
+            }
+            <label class="btn btn-sm btn-outline w-fit" [class.loading]="uploading() === 'video'">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.069A1 1 0 0121 8.845v6.31a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+              </svg>
+              {{ uploading() === 'video' ? '업로드 중...' : '동영상 선택' }}
+              <input type="file" class="hidden" accept="video/mp4,video/webm,video/ogg,video/quicktime" (change)="onVideoSelect($event)" [disabled]="!!uploading()">
+            </label>
+            <p class="text-xs text-base-content/50 mt-1.5">MP4, WebM, MOV · 최대 200MB · 동영상 설정 시 이미지보다 우선 표시됩니다</p>
+          </div>
+        }
+
+        <!-- 제목 -->
+        <label class="label-text font-medium pt-2.5" for="banner-title">제목</label>
+        <input id="banner-title" type="text" class="input input-bordered w-full"
+          [(ngModel)]="title" placeholder="제목을 입력하세요" maxlength="100">
+
+        <!-- 부제목 (HERO만) -->
+        @if (type === 'HERO') {
+          <label class="label-text font-medium pt-2.5" for="banner-subtitle">부제목</label>
+          <input id="banner-subtitle" type="text" class="input input-bordered w-full"
+            [(ngModel)]="subtitle" placeholder="부제목을 입력하세요" maxlength="200">
+        }
+
+        <!-- 링크 URL -->
+        <label class="label-text font-medium pt-2.5" for="banner-link">링크 URL</label>
+        <input id="banner-link" type="text" class="input input-bordered w-full"
+          [(ngModel)]="linkUrl" placeholder="https://...">
+
+        <!-- 노출 순서 -->
+        <label class="label-text font-medium pt-2.5" for="banner-order">노출 순서</label>
+        <input id="banner-order" type="number" class="input input-bordered w-32"
+          [(ngModel)]="sortOrder" min="0">
+
+        <!-- 노출 여부 -->
+        <span class="label-text font-medium pt-1">노출</span>
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" class="toggle toggle-primary toggle-sm" [(ngModel)]="isExposed">
+          <span class="text-sm text-base-content/60">{{ isExposed ? '노출' : '비노출' }}</span>
+        </label>
+
+      </div>
+
+      <!-- 버튼 -->
+      <div class="flex gap-3 mt-8 pt-5 border-t border-base-200">
+        <button class="btn btn-outline flex-1" (click)="navigateBack()">목록으로</button>
+        <button class="btn btn-primary flex-1" [disabled]="saving()" (click)="onSubmit()">
+          {{ saving() ? '저장 중...' : '저장하기' }}
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

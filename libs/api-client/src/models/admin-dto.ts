@@ -4,5 +4,5 @@
 export interface AdminDto {
   displayName: string;
   id: number;
-  usrname: string;
+  username: string;
 }

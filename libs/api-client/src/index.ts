@@ -92,6 +92,8 @@ export type { GalleryControllerCreate$Params as GalleryControllerCreate$Params }
 export { galleryControllerCreate as galleryControllerCreate } from './fn/gallery/gallery-controller-create';
 export type { GalleryControllerToggleExpose$Params as GalleryControllerToggleExpose$Params } from './fn/gallery/gallery-controller-toggle-expose';
 export { galleryControllerToggleExpose as galleryControllerToggleExpose } from './fn/gallery/gallery-controller-toggle-expose';
+export type { GalleryControllerTogglePin$Params as GalleryControllerTogglePin$Params } from './fn/gallery/gallery-controller-toggle-pin';
+export { galleryControllerTogglePin as galleryControllerTogglePin } from './fn/gallery/gallery-controller-toggle-pin';
 export type { GalleryControllerGetEventNames$Params as GalleryControllerGetEventNames$Params } from './fn/gallery/gallery-controller-get-event-names';
 export { galleryControllerGetEventNames as galleryControllerGetEventNames } from './fn/gallery/gallery-controller-get-event-names';
 export type { GalleryControllerUploadImage$Params as GalleryControllerUploadImage$Params } from './fn/gallery/gallery-controller-upload-image';
@@ -140,3 +142,14 @@ export type { CustomerControllerGetMe$Params as CustomerControllerGetMe$Params }
 export { customerControllerGetMe as customerControllerGetMe } from './fn/client/customer-controller-get-me';
 export type { CustomerControllerLogout$Params as CustomerControllerLogout$Params } from './fn/client/customer-controller-logout';
 export { customerControllerLogout as customerControllerLogout } from './fn/client/customer-controller-logout';
+export type { RegistrationResponseDto } from './models/registration-response-dto';
+export type { RegistrationControllerSearch$Params as RegistrationControllerSearch$Params } from './fn/registration/registration-controller-search';
+export { registrationControllerSearch as registrationControllerSearch } from './fn/registration/registration-controller-search';
+export type { RegistrationControllerFindOne$Params as RegistrationControllerFindOne$Params } from './fn/registration/registration-controller-find-one';
+export { registrationControllerFindOne as registrationControllerFindOne } from './fn/registration/registration-controller-find-one';
+export type { RegistrationControllerCreate$Params as RegistrationControllerCreate$Params } from './fn/registration/registration-controller-create';
+export { registrationControllerCreate as registrationControllerCreate } from './fn/registration/registration-controller-create';
+export type { RegistrationControllerUpdate$Params as RegistrationControllerUpdate$Params } from './fn/registration/registration-controller-update';
+export { registrationControllerUpdate as registrationControllerUpdate } from './fn/registration/registration-controller-update';
+export type { RegistrationControllerRemove$Params as RegistrationControllerRemove$Params } from './fn/registration/registration-controller-remove';
+export { registrationControllerRemove as registrationControllerRemove } from './fn/registration/registration-controller-remove';

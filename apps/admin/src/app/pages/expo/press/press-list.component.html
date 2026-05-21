@@ -1,0 +1,77 @@
+<div class="w-full max-w-4xl mx-auto">
+  <div class="flex justify-between items-center mb-5">
+    <h2 class="text-xl font-bold">보도자료</h2>
+    <button class="btn btn-primary btn-sm" (click)="navigateToNew()">+ 등록</button>
+  </div>
+
+  <div class="mb-4 flex gap-3">
+    <select class="select select-bordered select-sm w-48 shrink-0" [(ngModel)]="eventNameFilter" (ngModelChange)="onEventNameFilterChange()">
+      <option value="">전체 행사</option>
+      @for (s of schedules(); track s.id) {
+        <option [value]="s.fairName">{{ s.fairName }} ({{ s.year }} {{ s.region }})</option>
+      }
+    </select>
+    <app-search-input
+      class="flex-1"
+      placeholder="제목 또는 내용 검색"
+      [suggestions]="suggestions()"
+      (queryChange)="onQueryChange($event)"
+      (search)="onSearch($event)"
+      (select)="onSelect($event)"
+    />
+  </div>
+
+  <div class="card bg-base-100 shadow-sm overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="table table-zebra table-fixed w-full">
+        <thead>
+          <tr>
+            <th class="w-14">번호</th>
+            <th>제목</th>
+            <th class="w-24 text-center">고정</th>
+            <th class="w-24 text-center">공개</th>
+            <th class="w-28 hidden sm:table-cell">작성일</th>
+            <th class="w-20 text-center">관리</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of result()?.items; track item.id; let idx = $index) {
+            <tr>
+              <td class="text-sm text-base-content/50">{{ rowNumber(idx) }}</td>
+              <td
+                class="cursor-pointer text-primary hover:underline truncate max-w-0"
+                (click)="navigateToEdit(item)"
+                [title]="item.title"
+              >{{ item.title }}</td>
+              <td class="text-center">
+                <button class="btn btn-xs whitespace-nowrap"
+                  [ngClass]="item.isPinned ? 'btn-warning' : 'btn-outline btn-warning'"
+                  (click)="togglePin(item)">{{ item.isPinned ? '고정' : '고정안함' }}</button>
+              </td>
+              <td class="text-center">
+                <button class="btn btn-xs whitespace-nowrap"
+                  [ngClass]="item.isExposed ? 'btn-success' : 'btn-outline btn-success'"
+                  (click)="toggleExpose(item)">{{ item.isExposed ? '공개' : '비공개' }}</button>
+              </td>
+              <td class="text-sm text-base-content/60 hidden sm:table-cell whitespace-nowrap">{{ item.createdAt | slice:0:10 }}</td>
+              <td class="text-center">
+                <button class="btn btn-xs btn-error btn-outline whitespace-nowrap" (click)="remove(item)">삭제</button>
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="6" class="text-center text-base-content/40 py-10">등록된 보도자료가 없습니다.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  @if (result(); as pagedResult) {
+    <app-pagination
+      [pageNo]="pageNo()"
+      [totalPages]="pagedResult.pageInfo.totalPages"
+      [totalItems]="pagedResult.pageInfo.totalItems"
+      (pageChange)="changePage($event)"
+    />
+  }
+</div>
