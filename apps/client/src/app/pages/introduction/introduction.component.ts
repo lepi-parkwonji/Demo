@@ -41,7 +41,6 @@ export class IntroductionComponent implements OnInit {
     });
     this.api.getBanners('INTRO').subscribe({
       next: data => this.introImage.set(data[0]?.imageUrl ?? ''),
-      error: () => {},
     });
   }
 

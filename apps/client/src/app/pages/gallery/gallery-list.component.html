@@ -12,7 +12,10 @@
       @for (item of result()?.items; track item.id) {
         <div
           class="group bg-base-100 rounded-xl shadow-sm overflow-hidden cursor-pointer border border-base-200 hover:shadow-md transition-shadow"
+          role="button"
+          tabindex="0"
           (click)="openModal(item)"
+          (keyup.enter)="openModal(item)"
         >
           <div class="aspect-video bg-base-200 overflow-hidden">
             @if (item.imageUrl) {

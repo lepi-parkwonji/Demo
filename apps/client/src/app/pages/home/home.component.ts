@@ -19,11 +19,9 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.api.getPublicSchedules().subscribe({
       next: data => this.schedule.set(data[0] ?? null),
-      error: () => {},
     });
     this.api.getBanners('HERO').subscribe({
       next: data => this.heroBanner.set(data[0] ?? null),
-      error: () => {},
     });
   }
 }

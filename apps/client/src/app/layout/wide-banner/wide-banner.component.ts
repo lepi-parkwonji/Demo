@@ -16,7 +16,6 @@ export class WideBannerComponent implements OnInit {
         const first = data[0];
         if (first?.imageUrl) this.banner.set({ imageUrl: first.imageUrl, linkUrl: first.linkUrl });
       },
-      error: () => {},
     });
   }
 }

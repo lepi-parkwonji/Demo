@@ -2,8 +2,8 @@ import { PaginatedResult } from '@demo-shop/common';
 
 // delegate: any — Prisma의 findMany는 `SelectSubset<T, FindManyArgs>` 고차 제네릭을 반환하므로
 // 어떤 인터페이스로도 구조적으로 할당 불가(함수 파라미터 반공변). 반환 타입은 PaginatedResult<T>로 보장.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function paginate<T>(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   delegate: any,
   where: unknown,
   pageNo: number,

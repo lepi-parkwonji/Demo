@@ -13,6 +13,6 @@ export class FooterComponent implements OnInit {
   site = signal<SiteSettingsDto | null>(null);
 
   ngOnInit() {
-    this.api.getSiteSettings().subscribe({ next: data => this.site.set(data), error: () => {} });
+    this.api.getSiteSettings().subscribe({ next: data => this.site.set(data) });
   }
 }

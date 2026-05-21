@@ -107,8 +107,16 @@
 </div>
 
 @if (selectedItem(); as item) {
-  <div class="fixed inset-0 z-50 flex justify-end bg-black/20 transition-opacity" (click)="closeDrawer()">
+  <div
+    class="fixed inset-0 z-50 flex justify-end bg-black/20 transition-opacity"
+    role="button"
+    tabindex="0"
+    aria-label="닫기"
+    (click)="closeDrawer()"
+    (keyup.escape)="closeDrawer()"
+  >
     <!-- Drawer Panel -->
+    <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
     <div class="w-[450px] bg-base-100 h-full shadow-2xl flex flex-col transform transition-transform duration-300" (click)="$event.stopPropagation()">
       <!-- Header -->
       <div class="flex items-center justify-between p-4 border-b">

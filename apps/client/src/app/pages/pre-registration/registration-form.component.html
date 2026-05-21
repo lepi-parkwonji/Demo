@@ -67,7 +67,7 @@
         <button type="button" class="btn btn-primary" (click)="privacyModal.set(false)">확인</button>
       </div>
     </div>
-    <div class="modal-backdrop" (click)="privacyModal.set(false)"></div>
+    <button type="button" class="modal-backdrop" aria-label="닫기" (click)="privacyModal.set(false)"></button>
   </div>
 
   <!-- 마케팅 정보 수신 동의 모달 -->
@@ -83,7 +83,7 @@
         <button type="button" class="btn btn-primary" (click)="marketingModal.set(false)">확인</button>
       </div>
     </div>
-    <div class="modal-backdrop" (click)="marketingModal.set(false)"></div>
+    <button type="button" class="modal-backdrop" aria-label="닫기" (click)="marketingModal.set(false)"></button>
   </div>
 
       @if (errorMsg()) {
